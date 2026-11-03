@@ -5,7 +5,7 @@ function HeroMedia({ image, productCount }) {
     <div className="relative">
       <img
         src={image}
-        alt="Покупатель с товарами"
+        alt="Игровой компьютер"
         className="h-[380px] w-full rounded-2xl object-cover"
       />
 

@@ -7,7 +7,7 @@ function Navigation() {
       path: "/",
     },
     {
-      label: "Товары",
+      label: "Комплектующие",
       path: "/products",
     },
   ];

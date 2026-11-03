@@ -5,7 +5,7 @@ function HeroActions() {
         type="button"
         className="rounded-lg bg-emerald-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-emerald-800"
       >
-        Перейти к товарам
+        Перейти к сборке
       </button>
 
       <button
