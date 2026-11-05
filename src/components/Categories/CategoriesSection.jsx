@@ -12,7 +12,7 @@ function CategoriesSection() {
     {
       id: 2,
       title: "Процессоры",
-      image: "/images/categories/cpu.webp",
+      image: "/images/categories/cpu.jpg",
       path: "/categories/cpu",
     },
     {
@@ -24,8 +24,8 @@ function CategoriesSection() {
     {
       id: 4,
       title: "Блоки питания",
-      image: "/images/categories/powersupply.jpg",
-      path: "/categories/powersupply",
+      image: "/images/categories/psu.jpg",
+      path: "/categories/psu",
     },
   ];
 
