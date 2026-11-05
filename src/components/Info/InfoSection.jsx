@@ -10,7 +10,7 @@ function InfoSection() {
 
   return (
     <section className="bg-stone-50">
-      <div className="mx-auto max-w-6xl px-6 py-16">
+      <div className="mx-auto max-w-6xl px-6 py-12">
         <div className="grid grid-cols-1 gap-6 rounded-xl border border-gray-200 bg-white p-6 md:grid-cols-3">
           {infoBlocks.map((block) => (
             <InfoBlock
