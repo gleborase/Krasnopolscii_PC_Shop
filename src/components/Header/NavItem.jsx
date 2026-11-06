@@ -1,11 +1,21 @@
-function NavItem({ label, path }) {
+import { NavLink } from "react-router-dom";
+
+function NavItem({ label, path, onClick }) {
   return (
-    <a
-      href={path}
-      className="text-sm text-gray-600 transition-colors hover:text-gray-950"
+    <NavLink
+      onClick={onClick}
+      to={path}
+      end={path === "/"}
+      className={({ isActive }) =>
+        `text-sm transition-colors ${
+          isActive
+            ? "font-medium text-gray-950"
+            : "text-gray-600 hover:text-gray-950"
+        }`
+      }
     >
       {label}
-    </a>
+    </NavLink>
   );
 }
 

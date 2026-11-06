@@ -1,21 +1,20 @@
 import NavItem from "./NavItem";
 
-function Navigation() {
+function Navigation({ onNavigate }) {
   const navigationItems = [
-    {
-      label: "Главная",
-      path: "/",
-    },
-    {
-      label: "Комплектующие",
-      path: "/products",
-    },
+    { label: "Главная", path: "/" },
+    { label: "Комплектующие", path: "/products" },
   ];
 
   return (
-    <nav className="flex items-center gap-6">
+    <nav className="flex flex-col gap-3 md:flex-row md:items-center md:gap-6">
       {navigationItems.map((item) => (
-        <NavItem key={item.path} label={item.label} path={item.path} />
+        <NavItem
+          key={item.path}
+          label={item.label}
+          path={item.path}
+          onClick={onNavigate}
+        />
       ))}
     </nav>
   );

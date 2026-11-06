@@ -1,12 +1,13 @@
+import { Link } from "react-router-dom";
 import CategoryImage from "../Categories/CategoryImage";
 import ProductPrice from "./ProductPrice";
 
 function ProductCard({ title, price, image, category, path }) {
   return (
     <article className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white">
-      <a href={path}>
+      <Link to={path}>
         <CategoryImage src={image} alt={title} />
-      </a>
+      </Link>
 
       <div className="flex flex-1 flex-col gap-1 p-4">
         <p className="text-xs uppercase tracking-[0.15em] text-gray-500">

@@ -1,11 +1,29 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./layouts/Layout";
 import HomePage from "./pages/HomePage";
+import ProductPage from "./pages/ProductPage";
+import LoginPage from "./pages/LoginPage";
+import CartPage from "./pages/CartPage";
+import NotFoundPage from "./pages/NotFoundPage";
+import AdminPage from "./pages/AdminPage";
+import BuilderPage from "./pages/BuilderPage";
 
 function App() {
   return (
-    <Layout>
-      <HomePage />
-    </Layout>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/products" element={<ProductPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/builder" element={<BuilderPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/products/:id" element={<ProductPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

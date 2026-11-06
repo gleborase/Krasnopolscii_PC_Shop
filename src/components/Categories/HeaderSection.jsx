@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function HeaderSection({ label, title, linkText, linkPath }) {
   return (
     <div className="mb-8 flex items-end justify-between">
@@ -8,12 +10,12 @@ function HeaderSection({ label, title, linkText, linkPath }) {
         <h2 className="text-4xl font-medium text-gray-950">{title}</h2>
       </div>
 
-      <a
-        href={linkPath}
+      <Link
+        to={linkPath}
         className="text-sm text-gray-500 transition-colors hover:text-gray-900"
       >
         {linkText} →
-      </a>
+      </Link>
     </div>
   );
 }
