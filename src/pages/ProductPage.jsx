@@ -10,3 +10,5 @@ function ProductPage() {
     </section>
   );
 }
+
+export default ProductPage;
