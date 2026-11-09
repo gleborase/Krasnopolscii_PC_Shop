@@ -1,0 +1,76 @@
+export const products = [
+  {
+    id: 1,
+    category: "Видеокарты",
+    title: "ASUS Dual GeForce RTX 4070 OC",
+    price: 69990,
+    image: "/images/products/gpu_4070.jpg",
+    path: "/products/1",
+  },
+  {
+    id: 2,
+    category: "Накопители",
+    title: "Kingston NV2 1 ТБ",
+    price: 13990,
+    image: "/images/products/storage_NV2.jpg",
+    path: "/products/2",
+  },
+  {
+    id: 3,
+    category: "Процессоры",
+    title: "Intel Core i5-12400F",
+    price: 11990,
+    image: "/images/products/cpu_i5-12400F.jpg",
+    path: "/products/3",
+  },
+  {
+    id: 4,
+    category: "Блоки питания",
+    title: "MSI MPG A850G PCIE5",
+    price: 12990,
+    image: "/images/products/psu_A850G.jpg",
+    path: "/products/4",
+  },
+  {
+    id: 5,
+    category: "Оперативная память",
+    title: "Patriot DDR5-6000 (Kit of 2x16384) Viper Venom Black",
+    price: 59990,
+    image: "/images/products/memory_Viper.jpg",
+    path: "/products/5",
+  },
+  {
+    id: 6,
+    category: "Системы охлаждения",
+    title: "Arctic Liquid Freezer III 360 A-RGB",
+    price: 11990,
+    image: "/images/products/cooling_Liquid_Freezer.jpg",
+    path: "/products/6",
+  },
+  {
+    id: 7,
+    category: "Корпуса",
+    title: "DEEPCOOL CG530 4F",
+    price: 6300,
+    image: "/images/products/chassis_CG530.jpg",
+    path: "/products/7",
+  },
+  {
+    id: 8,
+    category: "Процессоры",
+    title: "Intel Core i5-14600KF",
+    price: 29990,
+    image: "/images/products/cpu_i5-14600KF.jpg",
+    path: "/products/8",
+  },
+  {
+    id: 9,
+    category: "Видеокарты",
+    title: "NVIDIA GeForce RTX 3080 Founders Edition",
+    price: 79990,
+    image: "/images/products/gpu_3080.jpg",
+    path: "/products/9",
+  }
+  
+];
+

@@ -7,6 +7,7 @@ import CartPage from "./pages/CartPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import AdminPage from "./pages/AdminPage";
 import BuilderPage from "./pages/BuilderPage";
+import CatalogPage from "./pages/CatalogPage";
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
-          <Route path="/products" element={<ProductPage />} />
+          <Route path="/products" element={<CatalogPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/builder" element={<BuilderPage />} />
