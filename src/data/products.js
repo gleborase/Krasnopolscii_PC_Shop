@@ -8,6 +8,7 @@ export const products = [
     path: "/products/1",
   },
   {
+    popular: true,
     id: 2,
     category: "Накопители",
     title: "Kingston NV2 1 ТБ",
@@ -32,6 +33,7 @@ export const products = [
     path: "/products/4",
   },
   {
+    popular: true,
     id: 5,
     category: "Оперативная память",
     title: "Patriot DDR5-6000 (Kit of 2x16384) Viper Venom Black",
@@ -40,6 +42,7 @@ export const products = [
     path: "/products/5",
   },
   {
+    popular: true,
     id: 6,
     category: "Системы охлаждения",
     title: "Arctic Liquid Freezer III 360 A-RGB",
@@ -56,6 +59,7 @@ export const products = [
     path: "/products/7",
   },
   {
+    popular: true,
     id: 8,
     category: "Процессоры",
     title: "Intel Core i5-14600KF",
