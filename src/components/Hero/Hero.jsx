@@ -1,5 +1,6 @@
 import HeroContent from "./HeroContent";
 import HeroMedia from "./HeroMedia";
+import { products } from "../../data/products";
 
 function Hero() {
   return (
@@ -11,7 +12,7 @@ function Hero() {
           description="Процессоры, видеокарты, материнские платы и память — проверенные комплектующие с честными характеристиками. Соберите ПК в конструкторе: совместимость проверяется автоматически."
         />
 
-        <HeroMedia image="/images/pcimage.webp" productCount={9} />
+        <HeroMedia image="/images/pcimage.webp" productCount={products.length} />
       </div>
     </section>
   );
