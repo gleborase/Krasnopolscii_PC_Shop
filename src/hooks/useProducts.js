@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchProducts } from "../api/productsApi";
+import { fetchProducts, getErrorMessage } from "../api/productsApi";
 
 export function useProducts() {
   const [products, setProducts] = useState([]);
@@ -16,7 +16,7 @@ export function useProducts() {
         setProducts(data);
       } catch (err) {
         if (err.name !== "AbortError") {
-          setError("Не удалось загрузить товары. Проверьте соединение.");
+          setError(getErrorMessage(err));
         }
       } finally {
         if (!controller.signal.aborted) {
