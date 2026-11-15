@@ -2,10 +2,10 @@ import Search from "./Search";
 import AccountAction from "./AccountAction";
 import CartAction from "./CartAction";
 
-function HeaderActions() {
+function HeaderActions({ onSearch }) {
   return (
     <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
-      <Search />
+      <Search onSearch={onSearch} />
 
       <AccountAction />
 

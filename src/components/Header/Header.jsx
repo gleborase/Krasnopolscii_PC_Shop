@@ -30,7 +30,7 @@ function Header() {
           } w-full flex-col gap-4 pt-4 md:flex md:w-auto md:flex-row md:items-center md:gap-8 md:pt-0`}
         >
           <Navigation onNavigate={() => setIsOpen(false)} />
-          <HeaderActions />
+          <HeaderActions onSearch={() => setIsOpen(false)} />
         </div>
       </div>
     </header>

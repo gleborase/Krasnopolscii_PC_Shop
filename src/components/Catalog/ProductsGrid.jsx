@@ -10,11 +10,20 @@ function getProductsWord(count) {
   return "товаров";
 }
 
-function ProductsGrid({ products }) {
-  if (products.length === 0) {
+function ProductsGrid({ products, onReset }) {
+    if (products.length === 0) {
     return (
       <div className="rounded-xl border border-gray-200 bg-white p-10 text-center text-sm text-gray-500">
-        Товары не найдены
+        <p>По вашему запросу ничего не найдено.</p>
+        {onReset && (
+          <button
+            type="button"
+            onClick={onReset}
+            className="mt-4 rounded-lg border border-gray-200 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-100"
+          >
+            Сбросить фильтры
+          </button>
+        )}
       </div>
     );
   }
