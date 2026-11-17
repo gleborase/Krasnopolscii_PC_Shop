@@ -1,8 +1,5 @@
 import { products as catalog } from "../data/products";
 
-const API_URL = "https://jsonplaceholder.typicode.com";
-const TIMEOUT_MS = 8000;
-
 export class ApiError extends Error {
   constructor(status) {
     super(`Ошибка HTTP: ${status}`);
@@ -11,39 +8,32 @@ export class ApiError extends Error {
   }
 }
 
-async function request(path, signal) {
-  const signals = [AbortSignal.timeout(TIMEOUT_MS)];
-  if (signal) signals.push(signal);
-
-  const response = await fetch(`${API_URL}${path}`, {
-    signal: AbortSignal.any(signals),
-  });
-
-  if (!response.ok) {
-    throw new ApiError(response.status);
-  }
-
-  return response.json();
-}
-
-function toProduct(post) {
-  const item = catalog[(post.id - 1) % catalog.length];
-
+function toProduct(item) {
   return {
     ...item,
-    id: post.id,
-    path: `/products/${post.id}`,
+    id: Number(item.id),
+    path: `/products/${item.id}`,
+    description:
+      item.description ??
+      "Комплектующее с проверенными характеристиками и совместимостью для вашей сборки.",
   };
 }
 
 export async function fetchProducts(signal) {
-  const posts = await request(`/posts?_limit=${catalog.length}`, signal);
-  return posts.map(toProduct);
+  void signal;
+  return catalog.map((item) => toProduct(item));
 }
 
 export async function fetchProductById(id, signal) {
-  const post = await request(`/posts/${encodeURIComponent(id)}`, signal);
-  return { ...toProduct(post), description: post.body };
+  void signal;
+
+  const product = catalog.find((item) => String(item.id) === String(id));
+
+  if (!product) {
+    throw new ApiError(404);
+  }
+
+  return toProduct(product);
 }
 
 export function getErrorMessage(err) {
