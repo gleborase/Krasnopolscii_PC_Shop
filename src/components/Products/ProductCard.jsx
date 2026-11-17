@@ -1,32 +1,54 @@
-import { Link } from "react-router-dom";
-import CategoryImage from "../Categories/CategoryImage";
-import ProductPrice from "./ProductPrice";
+import ProductCard from "../Products/ProductCard";
 
-function ProductCard({ title, price, image, category, path }) {
-  return (
-    <article className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white">
-      <Link to={path}>
-        <CategoryImage src={image} alt={title} />
-      </Link>
+function getProductsWord(count) {
+  const lastTwo = count % 100;
+  const last = count % 10;
 
-      <div className="flex flex-1 flex-col gap-1 p-4">
-        <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
-          {category}
-        </p>
-        <h3 className="text-sm font-medium text-gray-900">{title}</h3>
+  if (lastTwo >= 11 && lastTwo <= 14) return "товаров";
+  if (last === 1) return "товар";
+  if (last >= 2 && last <= 4) return "товара";
+  return "товаров";
+}
 
-        <div className="mt-auto flex items-center justify-between pt-4">
-          <ProductPrice price={price} />
+function ProductsGrid({ products, onReset }) {
+  if (products.length === 0) {
+    return (
+      <div className="rounded-xl border border-gray-200 bg-white p-10 text-center text-sm text-gray-500">
+        <p>По вашему запросу ничего не найдено.</p>
+        {onReset && (
           <button
             type="button"
-            className="rounded-lg bg-emerald-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-800"
+            onClick={onReset}
+            className="mt-4 rounded-lg border border-gray-200 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-100"
           >
-            В корзину
+            Сбросить фильтры
           </button>
-        </div>
+        )}
       </div>
-    </article>
+    );
+  }
+
+  return (
+    <div>
+      <p className="mb-4 text-sm text-gray-500">
+        Найдено: {products.length} {getProductsWord(products.length)}
+      </p>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {products.map((item) => (
+          <ProductCard
+            key={item.id}
+            title={item.title}
+            category={item.category}
+            image={item.image}
+            price={item.price}
+            path={item.path}
+            inStock={item.inStock}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
-export default ProductCard;
+export default ProductsGrid;

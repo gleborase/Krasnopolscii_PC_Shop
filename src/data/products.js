@@ -1,6 +1,8 @@
 export const products = [
   {
     id: 1,
+    brand: "ASUS",
+    inStock: true,
     category: "Видеокарты",
     title: "ASUS Dual GeForce RTX 4070 OC",
     price: 69990,
@@ -10,6 +12,8 @@ export const products = [
   {
     popular: true,
     id: 2,
+    brand: "Kingston",
+    inStock: false,
     category: "Накопители",
     title: "Kingston NV2 1 ТБ",
     price: 13990,
@@ -18,6 +22,8 @@ export const products = [
   },
   {
     id: 3,
+    brand: "Intel",
+    inStock: true,
     category: "Процессоры",
     title: "Intel Core i5-12400F",
     price: 11990,
@@ -26,6 +32,8 @@ export const products = [
   },
   {
     id: 4,
+    brand: "MSI",
+    inStock: true,
     category: "Блоки питания",
     title: "MSI MPG A850G PCIE5",
     price: 12990,
@@ -35,6 +43,8 @@ export const products = [
   {
     popular: true,
     id: 5,
+    brand: "Patriot",
+    inStock: false,
     category: "Оперативная память",
     title: "Patriot DDR5-6000 (Kit of 2x16384) Viper Venom Black",
     price: 59990,
@@ -44,6 +54,8 @@ export const products = [
   {
     popular: true,
     id: 6,
+    brand: "Arctic",
+    inStock: false,
     category: "Системы охлаждения",
     title: "Arctic Liquid Freezer III 360 A-RGB",
     price: 11990,
@@ -52,6 +64,8 @@ export const products = [
   },
   {
     id: 7,
+    brand: "DEEPCOOL",
+    inStock: true,
     category: "Корпуса",
     title: "DEEPCOOL CG530 4F",
     price: 6300,
@@ -61,6 +75,8 @@ export const products = [
   {
     popular: true,
     id: 8,
+    brand: "Intel",
+    inStock: true,
     category: "Процессоры",
     title: "Intel Core i5-14600KF",
     price: 29990,
@@ -69,6 +85,8 @@ export const products = [
   },
   {
     id: 9,
+    brand: "NVIDIA",
+    inStock: false,
     category: "Видеокарты",
     title: "NVIDIA GeForce RTX 3080 Founders Edition",
     price: 79990,

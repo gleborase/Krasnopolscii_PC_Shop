@@ -11,7 +11,7 @@ function getProductsWord(count) {
 }
 
 function ProductsGrid({ products, onReset }) {
-    if (products.length === 0) {
+  if (products.length === 0) {
     return (
       <div className="rounded-xl border border-gray-200 bg-white p-10 text-center text-sm text-gray-500">
         <p>По вашему запросу ничего не найдено.</p>
@@ -43,6 +43,7 @@ function ProductsGrid({ products, onReset }) {
             image={item.image}
             price={item.price}
             path={item.path}
+            inStock={item.inStock}
           />
         ))}
       </div>
