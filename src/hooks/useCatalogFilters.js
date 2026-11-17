@@ -8,6 +8,7 @@ export const initialFilters = {
   inStockOnly: false,
   popularOnly: false,
   sortType: "default",
+  page: 1,
 };
 
 function toggle(list, value) {
@@ -16,7 +17,7 @@ function toggle(list, value) {
     : [...list, value];
 }
 
-export function filtersReducer(state, action) {
+function applyFilterAction(state, action) {
   switch (action.type) {
     case "toggleCategory":
       return { ...state, categories: toggle(state.categories, action.value) };
@@ -32,11 +33,17 @@ export function filtersReducer(state, action) {
       return { ...state, popularOnly: action.value };
     case "setSortType":
       return { ...state, sortType: action.value };
-    case "reset":
-      return initialFilters;
     default:
       return state;
   }
+}
+
+export function filtersReducer(state, action) {
+  if (action.type === "setPage") return { ...state, page: action.value };
+  if (action.type === "reset") return initialFilters;
+
+  const next = applyFilterAction(state, action);
+  return next === state ? state : { ...next, page: 1 };
 }
 
 export function getActiveCount(filters) {

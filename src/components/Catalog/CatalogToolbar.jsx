@@ -1,4 +1,5 @@
 import { Search } from "lucide-react";
+import { sortOptions } from "../../utils/filterProducts";
 
 function CatalogToolbar({ query, onQueryChange, sortType, onSortChange }) {
   return (
@@ -17,11 +18,14 @@ function CatalogToolbar({ query, onQueryChange, sortType, onSortChange }) {
       <select
         value={sortType}
         onChange={(event) => onSortChange(event.target.value)}
+        aria-label="Сортировка"
         className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 outline-none focus:border-gray-400"
       >
-        <option value="default">По умолчанию</option>
-        <option value="cheap">Сначала дешёвые</option>
-        <option value="expensive">Сначала дорогие</option>
+        {sortOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
       </select>
     </div>
   );

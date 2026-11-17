@@ -10,7 +10,8 @@ function getProductsWord(count) {
   return "товаров";
 }
 
-function ProductsGrid({ products, onReset }) {
+function ProductsGrid({ products, total, onReset }) {
+  const count = total ?? products.length;
   if (products.length === 0) {
     return (
       <div className="rounded-xl border border-gray-200 bg-white p-10 text-center text-sm text-gray-500">
@@ -31,7 +32,8 @@ function ProductsGrid({ products, onReset }) {
   return (
     <div>
       <p className="mb-4 text-sm text-gray-500">
-        Найдено: {products.length} {getProductsWord(products.length)}
+        Найдено: {count} {getProductsWord(count)}{" "}
+        {getProductsWord(products.length)}
       </p>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

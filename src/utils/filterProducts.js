@@ -1,3 +1,20 @@
+export const sortOptions = [
+  { value: "default", label: "По умолчанию" },
+  { value: "cheap", label: "Сначала дешёвые" },
+  { value: "expensive", label: "Сначала дорогие" },
+  { value: "nameAsc", label: "По названию: А–Я" },
+  { value: "nameDesc", label: "По названию: Я–А" },
+  { value: "popular", label: "Сначала популярные" },
+];
+
+const sorters = {
+  cheap: (a, b) => a.price - b.price,
+  expensive: (a, b) => b.price - a.price,
+  nameAsc: (a, b) => a.title.localeCompare(b.title, "ru"),
+  nameDesc: (a, b) => b.title.localeCompare(a.title, "ru"),
+  popular: (a, b) => Number(Boolean(b.popular)) - Number(Boolean(a.popular)),
+};
+
 export function filterProducts(products, filters) {
   const {
     query,
@@ -28,8 +45,8 @@ export function filterProducts(products, filters) {
     return true;
   });
 
-  if (sortType === "cheap") result.sort((a, b) => a.price - b.price);
-  if (sortType === "expensive") result.sort((a, b) => b.price - a.price);
+  const sorter = sorters[sortType];
+  if (sorter) result.sort(sorter);
 
   return result;
 }
