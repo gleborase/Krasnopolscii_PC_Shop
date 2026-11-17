@@ -19,7 +19,7 @@ function CatalogToolbar({ query, onQueryChange, sortType, onSortChange }) {
         value={sortType}
         onChange={(event) => onSortChange(event.target.value)}
         aria-label="Сортировка"
-        className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 outline-none focus:border-gray-400"
+        className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 outline-none focus:border-gray-400 sm:w-auto"
       >
         {sortOptions.map((option) => (
           <option key={option.value} value={option.value}>

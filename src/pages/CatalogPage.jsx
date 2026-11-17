@@ -54,7 +54,7 @@ function CatalogPage() {
   }
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-12 md:px-6">
+    <section className="mx-auto max-w-6xl px-4 py-8 md:px-6 md:py-12">
       <h1 className="text-3xl font-semibold text-gray-900">Каталог комплектующих</h1>
 
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[16rem_1fr]">
