@@ -1,3 +1,4 @@
+
 import {
   LayoutDashboard,
   Package,
@@ -10,6 +11,7 @@ import {
 export const adminSections = [
   {
     id: "overview",
+    path: "/admin/dashboard",
     label: "Обзор",
     title: "Обзор",
     icon: LayoutDashboard,
@@ -17,38 +19,43 @@ export const adminSections = [
   },
   {
     id: "products",
+    path: "/admin/products",
     label: "Товары",
     title: "Управление товарами",
     icon: Package,
-    description: "Раздел для просмотра и управления товарами интернет-магазина.",
+    description: "Просмотр и управление товарами интернет-магазина.",
   },
   {
     id: "orders",
+    path: "/admin/orders",
     label: "Заказы",
     title: "Управление заказами",
     icon: ShoppingCart,
-    description: "Раздел для контроля заказов и изменения их статусов.",
+    description: "Контроль заказов интернет-магазина.",
   },
   {
     id: "categories",
+    path: "/admin/categories",
     label: "Категории",
     title: "Управление категориями",
     icon: Tags,
-    description: "Раздел для организации каталога по категориям комплектующих.",
+    description: "Организация каталога товаров по категориям.",
   },
   {
     id: "customers",
+    path: "/admin/customers",
     label: "Покупатели",
     title: "Список покупателей",
     icon: Users,
-    description: "Раздел для просмотра информации о покупателях магазина.",
+    description: "Информация о покупателях магазина.",
   },
   {
     id: "settings",
+    path: "/admin/settings",
     label: "Настройки",
     title: "Настройки панели",
     icon: Settings,
-    description: "Раздел с основными настройками административной панели.",
+    description: "Основные настройки административной панели.",
   },
 ];
 

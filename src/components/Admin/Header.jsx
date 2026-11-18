@@ -1,3 +1,4 @@
+
 import { Bell, Menu, Search } from "lucide-react";
 import { getSection } from "../../data/adminSections";
 
@@ -17,7 +18,9 @@ function Header({ activeSection, onMenuClick }) {
         </button>
 
         <div>
-          <p className="text-xs text-gray-500">Административная панель</p>
+          <p className="text-xs text-gray-500">
+            Административная панель
+          </p>
           <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">
             {section.label}
           </h1>
@@ -50,8 +53,12 @@ function Header({ activeSection, onMenuClick }) {
           </div>
 
           <div className="hidden sm:block">
-            <p className="text-sm font-semibold text-gray-900">Администратор</p>
-            <p className="text-xs text-gray-500">Управление магазином</p>
+            <p className="text-sm font-semibold text-gray-900">
+              Администратор
+            </p>
+            <p className="text-xs text-gray-500">
+              Управление магазином
+            </p>
           </div>
         </div>
       </div>

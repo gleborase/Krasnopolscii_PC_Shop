@@ -1,8 +1,9 @@
-import { Link } from "react-router-dom";
+
+import { Link, NavLink } from "react-router-dom";
 import { Store, X } from "lucide-react";
 import { adminSections } from "../../data/adminSections";
 
-function Sidebar({ activeSection, onSelect, isOpen, onClose }) {
+function Sidebar({ isOpen, onClose }) {
   return (
     <>
       {isOpen && (
@@ -24,6 +25,7 @@ function Sidebar({ activeSection, onSelect, isOpen, onClose }) {
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-900 text-white">
               <Store size={21} />
             </span>
+
             <span className="text-lg">
               PC Shop <span className="text-emerald-900">Admin</span>
             </span>
@@ -44,37 +46,31 @@ function Sidebar({ activeSection, onSelect, isOpen, onClose }) {
             Управление магазином
           </p>
 
-          <nav className="space-y-1" aria-label="Административная навигация">
-            {adminSections.map(({ id, label, icon: Icon }) => {
-              const isActive = activeSection === id;
-
-              return (
-                <button
-                  key={id}
-                  type="button"
-                  aria-current={isActive ? "page" : undefined}
-                  onClick={() => {
-                    onSelect(id);
-                    onClose();
-                  }}
-                  className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-medium transition-colors ${
+          <nav className="space-y-1">
+            {adminSections.map(({ id, path, label, icon: Icon }) => (
+              <NavLink
+                key={id}
+                to={path}
+                onClick={onClose}
+                className={({ isActive }) =>
+                  `flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-medium transition-colors ${
                     isActive
                       ? "bg-emerald-900/15 text-emerald-900"
                       : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                  }`}
-                >
-                  <Icon size={19} />
-                  {label}
-                </button>
-              );
-            })}
+                  }`
+                }
+              >
+                <Icon size={19} />
+                {label}
+              </NavLink>
+            ))}
           </nav>
         </div>
 
         <div className="mt-auto border-t border-gray-200 p-4">
           <Link
             to="/"
-            className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
+            className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-gray-600 hover:bg-gray-100"
           >
             <Store size={19} />
             Вернуться в магазин
