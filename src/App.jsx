@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./layouts/Layout";
 import HomePage from "./pages/HomePage";
@@ -13,11 +14,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/admin" element={<AdminPage />} />
+
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/products" element={<CatalogPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/admin" element={<AdminPage />} />
           <Route path="/builder" element={<BuilderPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/products/:id" element={<ProductPage />} />
