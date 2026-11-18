@@ -7,7 +7,6 @@ export const products = [
     title: "ASUS Dual GeForce RTX 4070 OC",
     price: 69990,
     image: "/images/products/gpu_4070.jpg",
-    path: "/products/1",
   },
   {
     popular: true,
@@ -18,7 +17,6 @@ export const products = [
     title: "Kingston NV2 1 ТБ",
     price: 13990,
     image: "/images/products/storage_NV2.jpg",
-    path: "/products/2",
   },
   {
     id: 3,
@@ -28,7 +26,6 @@ export const products = [
     title: "Intel Core i5-12400F",
     price: 11990,
     image: "/images/products/cpu_i5-12400F.jpg",
-    path: "/products/3",
   },
   {
     id: 4,
@@ -38,7 +35,6 @@ export const products = [
     title: "MSI MPG A850G PCIE5",
     price: 12990,
     image: "/images/products/psu_A850G.jpg",
-    path: "/products/4",
   },
   {
     popular: true,
@@ -49,7 +45,6 @@ export const products = [
     title: "Patriot DDR5-6000 (Kit of 2x16384) Viper Venom Black",
     price: 59990,
     image: "/images/products/memory_Viper.jpg",
-    path: "/products/5",
   },
   {
     popular: true,
@@ -60,7 +55,6 @@ export const products = [
     title: "Arctic Liquid Freezer III 360 A-RGB",
     price: 11990,
     image: "/images/products/cooling_Liquid_Freezer.jpg",
-    path: "/products/6",
   },
   {
     id: 7,
@@ -70,7 +64,6 @@ export const products = [
     title: "DEEPCOOL CG530 4F",
     price: 6300,
     image: "/images/products/chassis_CG530.jpg",
-    path: "/products/7",
   },
   {
     popular: true,
@@ -81,7 +74,6 @@ export const products = [
     title: "Intel Core i5-14600KF",
     price: 29990,
     image: "/images/products/cpu_i5-14600KF.jpg",
-    path: "/products/8",
   },
   {
     id: 9,
@@ -91,8 +83,34 @@ export const products = [
     title: "NVIDIA GeForce RTX 3080 Founders Edition",
     price: 79990,
     image: "/images/products/gpu_3080.jpg",
-    path: "/products/9",
+  },
+  {
+    id: 10,
+    brand: "ASRock",
+    inStock: false,
+    category: "Материнские платы",
+    title: "ASRock B760M PG SONIC WiFi",
+    price: 23399,
+    image: "/images/products/motherboard_B760M_PG_SONIC_WiFi.jpg",
+  },
+  {
+    id: 11,
+    brand: "Kingston",
+    inStock: true,
+    category: "Оперативная память",
+    title: "Kingston FURY DDR5-6000 (Kit of 2x16384) Beast Black",
+    price: 70399,
+    image: "/images/products/memory_FURY.jpg",
+  },
+  {
+    id: 12,
+    brand: "AMD",
+    inStock: true,
+    category: "Процессоры",
+    title: "AMD Ryzen 5 7500F",
+    price: 12799,
+    image: "/images/products/cpu_5_7500F.jpg",
+    path: "/products/12",
   }
-  
 ];
 
