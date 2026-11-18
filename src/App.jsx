@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Layout from "./layouts/Layout";
@@ -23,10 +22,7 @@ function App() {
       <Routes>
         {/* Административная панель */}
         <Route path="/admin" element={<AdminPage />}>
-          <Route
-            index
-            element={<Navigate to="dashboard" replace />}
-          />
+          <Route index element={<Navigate to="dashboard" replace />} />
 
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="products" element={<AdminProducts />} />
