@@ -21,12 +21,21 @@ function CheckboxRow({ label, count, checked, onChange }) {
         className="size-4 accent-emerald-900"
       />
       <span className="flex-1">{label}</span>
-      {count !== undefined && <span className="text-xs text-gray-500">{count}</span>}
+      {count !== undefined && (
+        <span className="text-xs text-gray-500">{count}</span>
+      )}
     </label>
   );
 }
 
-function FiltersPanel({ filters, dispatch, brands, counts, activeCount, onReset }) {
+function FiltersPanel({
+  filters,
+  dispatch,
+  brands,
+  counts,
+  activeCount,
+  onReset,
+}) {
   const showCounts = brands.length > 0;
 
   return (

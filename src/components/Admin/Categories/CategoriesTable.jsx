@@ -1,7 +1,7 @@
 
 import CategoryActions from "./CategoryActions";
 
-function CategoriesTable({ categories }) {
+function CategoriesTable({ categories, onEdit, onDelete }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
       <div className="overflow-x-auto">
@@ -18,7 +18,7 @@ function CategoriesTable({ categories }) {
           <tbody className="divide-y divide-gray-200">
             {categories.map((category, index) => (
               <tr
-                key={category.name}
+                key={category.id}
                 className="text-gray-700 transition-colors hover:bg-gray-50"
               >
                 <td className="px-6 py-4 font-medium text-gray-500">
@@ -36,7 +36,11 @@ function CategoriesTable({ categories }) {
                 </td>
 
                 <td className="px-6 py-4">
-                  <CategoryActions />
+                  <CategoryActions
+                    category={category}
+                    onEdit={onEdit}
+                    onDelete={onDelete}
+                  />
                 </td>
               </tr>
             ))}
