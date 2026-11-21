@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { fetchProductById, getErrorMessage } from "../api/productsApi";
+import { fetchProductById } from "../api/productsApi";
+import { getErrorMessage } from "../api/http";
 
 const initialResult = { id: null, product: null, error: null, status: null };
 

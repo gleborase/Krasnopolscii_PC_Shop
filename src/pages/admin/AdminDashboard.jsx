@@ -2,7 +2,7 @@
 import AdminWorkspace from "../../components/Admin/AdminWorkspace";
 
 function AdminDashboard() {
-  return <AdminWorkspace activeSection="overview" />;
+  return <AdminWorkspace />;
 }
 
 export default AdminDashboard;

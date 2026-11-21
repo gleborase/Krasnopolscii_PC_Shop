@@ -3,27 +3,31 @@ import { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Sidebar from "../components/Admin/Sidebar";
 import Header from "../components/Admin/Header";
-import { adminSections } from "../data/adminSections";
+import { useAdminSections } from "../hooks/useAdminSections";
 
 function AdminPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
+  const { sections, isLoading, error, refetch } = useAdminSections();
 
   const activeSection =
-    adminSections.find(
-      (section) => section.path === location.pathname
-    )?.id || "overview";
+    sections.find((section) => section.path === location.pathname) ??
+    sections[0];
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 md:flex">
       <Sidebar
+        sections={sections}
+        isLoading={isLoading}
+        error={error}
+        onRetry={refetch}
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
       />
 
       <div className="flex min-w-0 flex-1 flex-col">
         <Header
-          activeSection={activeSection}
+          section={activeSection}
           onMenuClick={() => setIsSidebarOpen(true)}
         />
 

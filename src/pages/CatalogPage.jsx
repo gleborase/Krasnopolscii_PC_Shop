@@ -10,6 +10,7 @@ import LoadingSkeleton from "../components/UI/LoadingSkeleton";
 import ErrorMessage from "../components/UI/ErrorMessage";
 import { useProducts } from "../hooks/useProducts";
 import { useCatalogFilters } from "../hooks/useCatalogFilters";
+import { useCategories } from "../hooks/useCategories";
 import { filterProducts } from "../utils/filterProducts";
 import { getBrands, getCounts } from "../utils/catalogStats";
 
@@ -18,6 +19,7 @@ const PAGE_SIZE = 6;
 function CatalogPage() {
   const { products, isLoading, error, refetch } = useProducts();
   const { filters, dispatch, activeCount } = useCatalogFilters();
+  const { categories } = useCategories();
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -80,6 +82,7 @@ function CatalogPage() {
               dispatch={dispatch}
               brands={brands}
               counts={counts}
+              categories={categories.map((category) => category.name)}
               activeCount={activeCount}
               onReset={resetAll}
             />

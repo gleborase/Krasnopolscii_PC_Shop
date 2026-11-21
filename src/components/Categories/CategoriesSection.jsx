@@ -1,33 +1,10 @@
 import HeaderSection from "./HeaderSection";
 import CategoryItem from "./CategoryItem";
+import { useSiteData } from "../../hooks/useAdminContent";
 
 function CategoriesSection() {
-  const categories = [
-    {
-      id: 1,
-      title: "Видеокарты",
-      image: "/images/categories/gpu.jpg",
-      path: "/categories/gpu",
-    },
-    {
-      id: 2,
-      title: "Процессоры",
-      image: "/images/categories/cpu.jpg",
-      path: "/categories/cpu",
-    },
-    {
-      id: 3,
-      title: "Оперативная память",
-      image: "/images/categories/ram.jpg",
-      path: "/categories/ram",
-    },
-    {
-      id: 4,
-      title: "Блоки питания",
-      image: "/images/categories/psu.jpg",
-      path: "/categories/psu",
-    },
-  ];
+  const { data } = useSiteData();
+  const categories = data?.popularCategories ?? [];
 
   return (
     <section className="bg-stone-50">

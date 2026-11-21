@@ -1,16 +1,5 @@
 import FilterGroup from "./FilterGroup";
 
-const categories = [
-  "Процессоры",
-  "Видеокарты",
-  "Материнские платы",
-  "Оперативная память",
-  "Блоки питания",
-  "Накопители",
-  "Системы охлаждения",
-  "Корпуса",
-];
-
 function CheckboxRow({ label, count, checked, onChange }) {
   return (
     <label className="flex items-center gap-2 text-sm text-gray-700">
@@ -35,6 +24,7 @@ function FiltersPanel({
   counts,
   activeCount,
   onReset,
+  categories = [],
 }) {
   const showCounts = brands.length > 0;
 

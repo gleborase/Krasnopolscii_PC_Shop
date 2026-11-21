@@ -1,9 +1,9 @@
 
 import { Link, NavLink } from "react-router-dom";
 import { Store, X } from "lucide-react";
-import { adminSections } from "../../data/adminSections";
+import { getAdminIcon } from "../../utils/adminIcons";
 
-function Sidebar({ isOpen, onClose }) {
+function Sidebar({ sections, isLoading, error, onRetry, isOpen, onClose }) {
   return (
     <>
       {isOpen && (
@@ -47,23 +47,37 @@ function Sidebar({ isOpen, onClose }) {
           </p>
 
           <nav className="space-y-1">
-            {adminSections.map(({ id, path, label, icon: Icon }) => (
-              <NavLink
-                key={id}
-                to={path}
-                onClick={onClose}
-                className={({ isActive }) =>
-                  `flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-medium transition-colors ${
-                    isActive
-                      ? "bg-emerald-900/15 text-emerald-900"
-                      : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                  }`
-                }
-              >
-                <Icon size={19} />
-                {label}
-              </NavLink>
-            ))}
+            {isLoading && (
+              <p className="px-3 py-2 text-sm text-gray-500">Загрузка меню...</p>
+            )}
+            {error && (
+              <div className="px-3 py-2 text-sm text-red-400">
+                <p>{error}</p>
+                <button type="button" onClick={onRetry} className="mt-2 underline hover:opacity-80">
+                  Попробовать снова
+                </button>
+              </div>
+            )}
+            {sections.map(({ id, path, label, icon }) => {
+              const Icon = getAdminIcon(icon);
+              return (
+                <NavLink
+                  key={id}
+                  to={path}
+                  onClick={onClose}
+                  className={({ isActive }) =>
+                    `flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-medium transition-colors ${
+                      isActive
+                        ? "bg-emerald-900/15 text-emerald-900"
+                        : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                    }`
+                  }
+                >
+                  <Icon size={19} />
+                  {label}
+                </NavLink>
+              );
+            })}
           </nav>
         </div>
 

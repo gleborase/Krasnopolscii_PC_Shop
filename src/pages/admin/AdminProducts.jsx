@@ -1,10 +1,12 @@
 
 import { useState } from "react";
 import { Search, Package } from "lucide-react";
-import { products } from "../../data/products";
+import { useProducts } from "../../hooks/useProducts";
+import ErrorMessage from "../../components/UI/ErrorMessage";
 
 function AdminProducts() {
   const [search, setSearch] = useState("");
+  const { products, isLoading, error, refetch } = useProducts();
 
   const filteredProducts = products.filter((product) => {
     const query = search.toLowerCase();
@@ -29,7 +31,7 @@ function AdminProducts() {
         </div>
 
         <span className="w-fit rounded-xl bg-emerald-900/10 px-4 py-2 text-sm font-semibold text-emerald-900">
-          Всего товаров: {products.length}
+          Всего товаров: {isLoading ? "…" : products.length}
         </span>
       </div>
 
@@ -45,6 +47,13 @@ function AdminProducts() {
         />
       </div>
 
+      {isLoading ? (
+        <div className="rounded-2xl border border-gray-200 bg-white p-10 text-center text-sm text-gray-500">
+          Загрузка товаров...
+        </div>
+      ) : error ? (
+        <ErrorMessage message={error} onRetry={refetch} />
+      ) : (
       <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[700px] text-left text-sm">
@@ -66,7 +75,6 @@ function AdminProducts() {
                       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-500">
                         <Package size={19} />
                       </div>
-
                       <span className="font-medium text-gray-900">
                         {product.title}
                       </span>
@@ -103,6 +111,7 @@ function AdminProducts() {
           </p>
         )}
       </div>
+      )}
     </section>
   );
 }

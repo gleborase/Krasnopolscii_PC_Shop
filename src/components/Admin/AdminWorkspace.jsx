@@ -6,21 +6,10 @@ import {
   ShoppingBag,
   Users,
 } from "lucide-react";
-import { getSection } from "../../data/adminSections";
+import ErrorMessage from "../UI/ErrorMessage";
+import { useOrders, useStatistics } from "../../hooks/useAdminContent";
 
-const statistics = [
-  { label: "Выручка", value: "125 400 ₽", change: "+12,5%", icon: CreditCard, positive: true },
-  { label: "Заказы", value: "48", change: "+8,2%", icon: ShoppingBag, positive: true },
-  { label: "Товары", value: "126", change: "+4 новых", icon: Package, positive: true },
-  { label: "Покупатели", value: "312", change: "−2,1%", icon: Users, positive: false },
-];
-
-const recentOrders = [
-  { id: "#PC-1048", customer: "Иван Петров", date: "18.11.2026", amount: "24 990 ₽", status: "Выполнен" },
-  { id: "#PC-1047", customer: "Анна Смирнова", date: "18.11.2026", amount: "18 450 ₽", status: "В обработке" },
-  { id: "#PC-1046", customer: "Максим Иванов", date: "17.11.2026", amount: "42 300 ₽", status: "Ожидает оплаты" },
-  { id: "#PC-1045", customer: "Елена Козлова", date: "17.11.2026", amount: "9 890 ₽", status: "Выполнен" },
-];
+const statisticIcons = { CreditCard, Package, ShoppingBag, Users };
 
 const statusStyles = {
   "Выполнен": "bg-emerald-500/15 text-emerald-400",
@@ -54,7 +43,7 @@ function StatCard({ label, value, change, icon: Icon, positive }) {
   );
 }
 
-function OrdersTable() {
+function OrdersTable({ orders }) {
   return (
     <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
       <div className="flex flex-col gap-2 border-b border-gray-200 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
@@ -66,7 +55,7 @@ function OrdersTable() {
         </div>
 
         <span className="w-fit rounded-lg bg-emerald-900/15 px-3 py-1.5 text-xs font-semibold text-emerald-900">
-          Всего: 48
+          Всего: {orders.length}
         </span>
       </div>
 
@@ -83,12 +72,14 @@ function OrdersTable() {
           </thead>
 
           <tbody className="divide-y divide-gray-200">
-            {recentOrders.map((order) => (
+            {orders.map((order) => (
               <tr key={order.id} className="text-gray-700 hover:bg-gray-50">
                 <td className="px-6 py-4 font-semibold text-gray-900">{order.id}</td>
                 <td className="px-6 py-4">{order.customer}</td>
                 <td className="px-6 py-4">{order.date}</td>
-                <td className="px-6 py-4 font-medium">{order.amount}</td>
+                <td className="px-6 py-4 font-medium">
+                  {Number(order.amount).toLocaleString("ru-RU")} ₽
+                </td>
                 <td className="px-6 py-4">
                   <span
                     className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${statusStyles[order.status]}`}
@@ -105,29 +96,20 @@ function OrdersTable() {
   );
 }
 
-function SectionPlaceholder({ section }) {
-  return (
-    <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
-      <h2 className="text-lg font-bold text-gray-900">{section.title}</h2>
+function AdminWorkspace() {
+  const { data: statistics, isLoading: isStatisticsLoading, error: statisticsError, refetch: refetchStatistics } = useStatistics();
+  const { data: orders, isLoading: isOrdersLoading, error: ordersError, refetch: refetchOrders } = useOrders();
 
-      <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-500">
-        {section.description}
-      </p>
-
-      <p className="mt-6 rounded-xl bg-gray-50 p-4 text-sm text-gray-600">
-        Рабочий раздел интерфейса подготовлен. Функции управления данными
-        будут добавлены на следующих этапах разработки.
-      </p>
-    </section>
-  );
-}
-
-function AdminWorkspace({ activeSection }) {
-  const section = getSection(activeSection);
-
-  if (section.id !== "overview") {
-    return <SectionPlaceholder section={section} />;
+  if (statisticsError) {
+    return <ErrorMessage message={statisticsError} onRetry={refetchStatistics} />;
   }
+
+  if (ordersError) {
+    return <ErrorMessage message={ordersError} onRetry={refetchOrders} />;
+  }
+
+  const list = statistics ?? [];
+  const orderList = orders ?? [];
 
   return (
     <div className="space-y-6">
@@ -140,12 +122,22 @@ function AdminWorkspace({ activeSection }) {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {statistics.map((item) => (
-          <StatCard key={item.label} {...item} />
+        {isStatisticsLoading ? (
+          <p className="text-sm text-gray-500">Загрузка показателей...</p>
+        ) : list.map((item) => (
+          <StatCard
+            key={item.label}
+            {...item}
+            icon={statisticIcons[item.icon] ?? Package}
+          />
         ))}
       </div>
 
-      <OrdersTable />
+      {isOrdersLoading ? (
+        <p className="text-sm text-gray-500">Загрузка заказов...</p>
+      ) : (
+        <OrdersTable orders={orderList} />
+      )}
     </div>
   );
 }

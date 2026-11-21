@@ -1,36 +1,29 @@
-
 import { useState } from "react";
 import { Tags, Package, Plus, X } from "lucide-react";
-import { products } from "../../data/products";
+import { useProducts } from "../../hooks/useProducts";
 import CategoriesTable from "../../components/Admin/Categories/CategoriesTable";
-
-function getInitialCategories() {
-  const categoryMap = new Map();
-
-  products.forEach((product) => {
-    const categoryName = product.category;
-
-    categoryMap.set(
-      categoryName,
-      (categoryMap.get(categoryName) || 0) + 1
-    );
-  });
-
-  return Array.from(categoryMap, ([name, count], index) => ({
-    id: index + 1,
-    name,
-    count,
-  }));
-}
+import ErrorMessage from "../../components/UI/ErrorMessage";
+import { useCategories } from "../../hooks/useCategories";
+import { getErrorMessage } from "../../api/http";
 
 function AdminCategories() {
-  const [categories, setCategories] = useState(getInitialCategories);
+  const {
+    categories,
+    isLoading,
+    error: loadError,
+    refetch,
+    addCategory,
+    renameCategory,
+    removeCategory,
+  } = useCategories();
+  const { products, isLoading: isProductsLoading } = useProducts();
+
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
   const [categoryName, setCategoryName] = useState("");
   const [error, setError] = useState("");
-
-  const totalProducts = products.length;
+  const [actionError, setActionError] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   function openAddForm() {
     setEditingCategory(null);
@@ -53,7 +46,7 @@ function AdminCategories() {
     setError("");
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
     const trimmedName = categoryName.trim();
@@ -74,38 +67,41 @@ function AdminCategories() {
       return;
     }
 
-    if (editingCategory) {
-      setCategories((prevCategories) =>
-        prevCategories.map((category) =>
-          category.id === editingCategory.id
-            ? { ...category, name: trimmedName }
-            : category
-        )
-      );
-    } else {
-      setCategories((prevCategories) => [
-        ...prevCategories,
-        {
-          id: Date.now(),
-          name: trimmedName,
-          count: 0,
-        },
-      ]);
-    }
+    setIsSaving(true);
+    setActionError("");
 
-    closeForm();
+    try {
+      if (editingCategory) {
+        await renameCategory(editingCategory.id, trimmedName);
+      } else {
+        await addCategory(trimmedName);
+      }
+
+      closeForm();
+    } catch (err) {
+      setError(getErrorMessage(err));
+    } finally {
+      setIsSaving(false);
+    }
   }
 
-  function handleDelete(categoryId) {
+  async function handleDelete(categoryId) {
     const confirmed = window.confirm(
       "Вы действительно хотите удалить эту категорию?"
     );
 
     if (!confirmed) return;
 
-    setCategories((prevCategories) =>
-      prevCategories.filter((category) => category.id !== categoryId)
-    );
+    setIsSaving(true);
+    setActionError("");
+
+    try {
+      await removeCategory(categoryId);
+    } catch (err) {
+      setActionError(getErrorMessage(err));
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   return (
@@ -124,7 +120,8 @@ function AdminCategories() {
         <button
           type="button"
           onClick={openAddForm}
-          className="flex w-fit items-center gap-2 rounded-xl bg-emerald-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
+          disabled={isLoading || Boolean(loadError)}
+          className="flex w-fit items-center gap-2 rounded-xl bg-emerald-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
         >
           <Plus size={18} />
           Добавить категорию
@@ -144,7 +141,7 @@ function AdminCategories() {
           </div>
 
           <p className="mt-3 text-2xl font-bold text-gray-900">
-            {categories.length}
+            {isLoading ? "…" : categories.length}
           </p>
         </article>
 
@@ -160,7 +157,7 @@ function AdminCategories() {
           </div>
 
           <p className="mt-3 text-2xl font-bold text-gray-900">
-            {totalProducts}
+            {isProductsLoading ? "…" : products.length}
           </p>
         </article>
       </div>
@@ -172,15 +169,33 @@ function AdminCategories() {
           </h3>
 
           <p className="mt-1 text-sm text-gray-500">
-            Всего категорий: {categories.length}
+            Всего категорий: {isLoading ? "…" : categories.length}
           </p>
         </div>
 
-        <CategoriesTable
-          categories={categories}
-          onEdit={openEditForm}
-          onDelete={handleDelete}
-        />
+        {actionError && (
+          <p
+            role="alert"
+            className="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400"
+          >
+            {actionError}
+          </p>
+        )}
+
+        {isLoading ? (
+          <div className="rounded-2xl border border-gray-200 bg-white p-10 text-center text-sm text-gray-500">
+            Загрузка категорий...
+          </div>
+        ) : loadError ? (
+          <ErrorMessage message={loadError} onRetry={refetch} />
+        ) : (
+          <CategoriesTable
+            categories={categories}
+            onEdit={openEditForm}
+            onDelete={handleDelete}
+            disabled={isSaving}
+          />
+        )}
       </div>
 
       {isFormOpen && (
@@ -196,7 +211,8 @@ function AdminCategories() {
               <button
                 type="button"
                 onClick={closeForm}
-                className="rounded-lg p-2 text-gray-500 transition hover:bg-gray-100"
+                disabled={isSaving}
+                className="rounded-lg p-2 text-gray-500 transition hover:bg-gray-100 disabled:opacity-40"
                 aria-label="Закрыть"
               >
                 <X size={20} />
@@ -236,16 +252,22 @@ function AdminCategories() {
                 <button
                   type="button"
                   onClick={closeForm}
-                  className="rounded-xl border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                  disabled={isSaving}
+                  className="rounded-xl border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:opacity-40"
                 >
                   Отмена
                 </button>
 
                 <button
                   type="submit"
-                  className="rounded-xl bg-emerald-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
+                  disabled={isSaving}
+                  className="rounded-xl bg-emerald-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90 disabled:opacity-60"
                 >
-                  {editingCategory ? "Сохранить" : "Добавить"}
+                  {isSaving
+                    ? "Сохранение..."
+                    : editingCategory
+                      ? "Сохранить"
+                      : "Добавить"}
                 </button>
               </div>
             </form>

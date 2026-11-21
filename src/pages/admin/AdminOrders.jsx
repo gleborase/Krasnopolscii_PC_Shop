@@ -1,36 +1,10 @@
-
-const orders = [
-  {
-    id: "#PC-1048",
-    customer: "Иван Петров",
-    date: "18.11.2026",
-    amount: 24990,
-    status: "Выполнен",
-  },
-  {
-    id: "#PC-1047",
-    customer: "Анна Смирнова",
-    date: "18.11.2026",
-    amount: 18450,
-    status: "В обработке",
-  },
-  {
-    id: "#PC-1046",
-    customer: "Максим Иванов",
-    date: "17.11.2026",
-    amount: 42300,
-    status: "Ожидает оплаты",
-  },
-  {
-    id: "#PC-1045",
-    customer: "Елена Козлова",
-    date: "17.11.2026",
-    amount: 9890,
-    status: "Выполнен",
-  },
-];
+import ErrorMessage from "../../components/UI/ErrorMessage";
+import { useOrders } from "../../hooks/useAdminContent";
 
 function AdminOrders() {
+  const { data: orders, isLoading, error, refetch } = useOrders();
+  const list = orders ?? [];
+
   return (
     <section className="space-y-6">
       <div>
@@ -43,25 +17,33 @@ function AdminOrders() {
         </p>
       </div>
 
+      {isLoading ? (
+        <div className="rounded-2xl border border-gray-200 bg-white p-10 text-center text-sm text-gray-500">
+          Загрузка заказов...
+        </div>
+      ) : error ? (
+        <ErrorMessage message={error} onRetry={refetch} />
+      ) : (
+      <>
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="rounded-2xl border border-gray-200 bg-white p-5">
           <p className="text-sm text-gray-500">Всего заказов</p>
           <p className="mt-2 text-2xl font-bold text-gray-900">
-            {orders.length}
+            {list.length}
           </p>
         </div>
 
         <div className="rounded-2xl border border-gray-200 bg-white p-5">
           <p className="text-sm text-gray-500">Выполнено</p>
           <p className="mt-2 text-2xl font-bold text-emerald-700">
-            {orders.filter((order) => order.status === "Выполнен").length}
+            {list.filter((order) => order.status === "Выполнен").length}
           </p>
         </div>
 
         <div className="rounded-2xl border border-gray-200 bg-white p-5">
           <p className="text-sm text-gray-500">В обработке</p>
           <p className="mt-2 text-2xl font-bold text-amber-600">
-            {orders.filter((order) => order.status !== "Выполнен").length}
+            {list.filter((order) => order.status !== "Выполнен").length}
           </p>
         </div>
       </div>
@@ -80,7 +62,7 @@ function AdminOrders() {
             </thead>
 
             <tbody className="divide-y divide-gray-100">
-              {orders.map((order) => (
+              {list.map((order) => (
                 <tr key={order.id} className="text-gray-700 hover:bg-gray-50">
                   <td className="px-5 py-4 font-semibold text-gray-900">
                     {order.id}
@@ -112,6 +94,8 @@ function AdminOrders() {
           </table>
         </div>
       </div>
+      </>
+      )}
     </section>
   );
 }

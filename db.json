@@ -1,0 +1,449 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "Видеокарты",
+      "count": 2
+    },
+    {
+      "id": 2,
+      "name": "Накопители",
+      "count": 1
+    },
+    {
+      "id": 3,
+      "name": "Процессоры",
+      "count": 3
+    },
+    {
+      "id": 4,
+      "name": "Блоки питания",
+      "count": 1
+    },
+    {
+      "id": 5,
+      "name": "Оперативная память",
+      "count": 2
+    },
+    {
+      "id": 6,
+      "name": "Системы охлаждения",
+      "count": 1
+    },
+    {
+      "id": 7,
+      "name": "Корпуса",
+      "count": 1
+    },
+    {
+      "id": 8,
+      "name": "Материнские платы",
+      "count": 1
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "brand": "ASUS",
+      "inStock": true,
+      "category": "Видеокарты",
+      "title": "ASUS Dual GeForce RTX 4070 OC",
+      "price": 69990,
+      "image": "/images/products/gpu_4070.jpg"
+    },
+    {
+      "popular": true,
+      "id": 2,
+      "brand": "Kingston",
+      "inStock": false,
+      "category": "Накопители",
+      "title": "Kingston NV2 1 ТБ",
+      "price": 13990,
+      "image": "/images/products/storage_NV2.jpg"
+    },
+    {
+      "id": 3,
+      "brand": "Intel",
+      "inStock": true,
+      "category": "Процессоры",
+      "title": "Intel Core i5-12400F",
+      "price": 11990,
+      "image": "/images/products/cpu_i5-12400F.jpg"
+    },
+    {
+      "id": 4,
+      "brand": "MSI",
+      "inStock": true,
+      "category": "Блоки питания",
+      "title": "MSI MPG A850G PCIE5",
+      "price": 12990,
+      "image": "/images/products/psu_A850G.jpg"
+    },
+    {
+      "popular": true,
+      "id": 5,
+      "brand": "Patriot",
+      "inStock": false,
+      "category": "Оперативная память",
+      "title": "Patriot DDR5-6000 (Kit of 2x16384) Viper Venom Black",
+      "price": 59990,
+      "image": "/images/products/memory_Viper.jpg"
+    },
+    {
+      "popular": true,
+      "id": 6,
+      "brand": "Arctic",
+      "inStock": false,
+      "category": "Системы охлаждения",
+      "title": "Arctic Liquid Freezer III 360 A-RGB",
+      "price": 11990,
+      "image": "/images/products/cooling_Liquid_Freezer.jpg"
+    },
+    {
+      "id": 7,
+      "brand": "DEEPCOOL",
+      "inStock": true,
+      "category": "Корпуса",
+      "title": "DEEPCOOL CG530 4F",
+      "price": 6300,
+      "image": "/images/products/chassis_CG530.jpg"
+    },
+    {
+      "popular": true,
+      "id": 8,
+      "brand": "Intel",
+      "inStock": true,
+      "category": "Процессоры",
+      "title": "Intel Core i5-14600KF",
+      "price": 29990,
+      "image": "/images/products/cpu_i5-14600KF.jpg"
+    },
+    {
+      "id": 9,
+      "brand": "NVIDIA",
+      "inStock": false,
+      "category": "Видеокарты",
+      "title": "NVIDIA GeForce RTX 3080 Founders Edition",
+      "price": 79990,
+      "image": "/images/products/gpu_3080.jpg"
+    },
+    {
+      "id": 10,
+      "brand": "ASRock",
+      "inStock": false,
+      "category": "Материнские платы",
+      "title": "ASRock B760M PG SONIC WiFi",
+      "price": 23399,
+      "image": "/images/products/motherboard_B760M_PG_SONIC_WiFi.jpg"
+    },
+    {
+      "id": 11,
+      "brand": "Kingston",
+      "inStock": true,
+      "category": "Оперативная память",
+      "title": "Kingston FURY DDR5-6000 (Kit of 2x16384) Beast Black",
+      "price": 70399,
+      "image": "/images/products/memory_FURY.jpg"
+    },
+    {
+      "id": 12,
+      "brand": "AMD",
+      "inStock": true,
+      "category": "Процессоры",
+      "title": "AMD Ryzen 5 7500F",
+      "price": 12799,
+      "image": "/images/products/cpu_5_7500F.jpg"
+    }
+  ],
+  "adminSections": [
+    {
+      "id": "overview",
+      "path": "/admin/dashboard",
+      "label": "Обзор",
+      "title": "Обзор",
+      "icon": "LayoutDashboard",
+      "description": "Ключевые показатели и последние заказы интернет-магазина."
+    },
+    {
+      "id": "products",
+      "path": "/admin/products",
+      "label": "Товары",
+      "title": "Управление товарами",
+      "icon": "Package",
+      "description": "Просмотр и управление товарами интернет-магазина."
+    },
+    {
+      "id": "orders",
+      "path": "/admin/orders",
+      "label": "Заказы",
+      "title": "Управление заказами",
+      "icon": "ShoppingCart",
+      "description": "Контроль заказов интернет-магазина."
+    },
+    {
+      "id": "categories",
+      "path": "/admin/categories",
+      "label": "Категории",
+      "title": "Управление категориями",
+      "icon": "Tags",
+      "description": "Организация каталога товаров по категориям."
+    },
+    {
+      "id": "customers",
+      "path": "/admin/customers",
+      "label": "Покупатели",
+      "title": "Список покупателей",
+      "icon": "Users",
+      "description": "Информация о покупателях магазина."
+    },
+    {
+      "id": "settings",
+      "path": "/admin/settings",
+      "label": "Настройки",
+      "title": "Настройки панели",
+      "icon": "Settings",
+      "description": "Основные настройки административной панели."
+    }
+  ],
+  "siteData": {
+    "brandName": "PC Shop",
+    "hero": {
+      "label": "Конструктор ПК · 2026",
+      "title": "Собери надёжный ПК",
+      "description": "Процессоры, видеокарты, материнские платы и память — проверенные комплектующие с честными характеристиками. Соберите ПК в конструкторе: совместимость проверяется автоматически."
+    },
+    "navigation": [
+      {
+        "label": "Главная",
+        "path": "/"
+      },
+      {
+        "label": "Комплектующие",
+        "path": "/products"
+      }
+    ],
+    "footerColumns": [
+      {
+        "id": 1,
+        "title": "Каталог",
+        "links": [
+          {
+            "label": "Все комплектующие",
+            "path": "/products"
+          },
+          {
+            "label": "Конструктор ПК",
+            "path": "/builder"
+          },
+          {
+            "label": "Новинки",
+            "path": "/products"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Покупателям",
+        "links": [
+          {
+            "label": "Корзина",
+            "path": "/cart"
+          },
+          {
+            "label": "Вход",
+            "path": "/login"
+          },
+          {
+            "label": "Регистрация",
+            "path": "/register"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Магазин",
+        "links": [
+          {
+            "label": "Админ-панель",
+            "path": "/admin"
+          },
+          {
+            "label": "Управление товарами",
+            "path": "/admin/products"
+          },
+          {
+            "label": "Категории",
+            "path": "/admin/categories"
+          }
+        ]
+      }
+    ],
+    "footer": {
+      "description": "Учебный интернет-магазин комплектующих с конструктором совместимых сборок на React.",
+      "copyright": "© 2026 PC Shop. Учебный проект.",
+      "stack": "React · Tailwind CSS · Vite"
+    },
+    "infoBlocks": [
+      {
+        "id": 1,
+        "icon": "Truck",
+        "title": "Доставка 1–3 дня",
+        "text": "По всей России, бесплатно от 10 000 ₽"
+      },
+      {
+        "id": 2,
+        "icon": "ShieldCheck",
+        "title": "Гарантия качества",
+        "text": "Честная гарантия на все товары 2 года"
+      },
+      {
+        "id": 3,
+        "icon": "RotateCcw",
+        "title": "Возврат 30 дней",
+        "text": "Без вопросов и лишних формальностей"
+      }
+    ],
+    "popularCategories": [
+      {
+        "id": 1,
+        "title": "Видеокарты",
+        "image": "/images/categories/gpu.jpg",
+        "path": "/categories/gpu"
+      },
+      {
+        "id": 2,
+        "title": "Процессоры",
+        "image": "/images/categories/cpu.jpg",
+        "path": "/categories/cpu"
+      },
+      {
+        "id": 3,
+        "title": "Оперативная память",
+        "image": "/images/categories/ram.jpg",
+        "path": "/categories/ram"
+      },
+      {
+        "id": 4,
+        "title": "Блоки питания",
+        "image": "/images/categories/psu.jpg",
+        "path": "/categories/psu"
+      }
+    ]
+  },
+  "orders": [
+    {
+      "id": "#PC-1048",
+      "customer": "Иван Петров",
+      "date": "18.11.2026",
+      "amount": 24990,
+      "status": "Выполнен"
+    },
+    {
+      "id": "#PC-1047",
+      "customer": "Анна Смирнова",
+      "date": "18.11.2026",
+      "amount": 18450,
+      "status": "В обработке"
+    },
+    {
+      "id": "#PC-1046",
+      "customer": "Максим Иванов",
+      "date": "17.11.2026",
+      "amount": 42300,
+      "status": "Ожидает оплаты"
+    },
+    {
+      "id": "#PC-1045",
+      "customer": "Елена Козлова",
+      "date": "17.11.2026",
+      "amount": 9890,
+      "status": "Выполнен"
+    }
+  ],
+  "statistics": [
+    {
+      "label": "Выручка",
+      "value": "125 400 ₽",
+      "change": "+12,5%",
+      "icon": "CreditCard",
+      "positive": true
+    },
+    {
+      "label": "Заказы",
+      "value": "48",
+      "change": "+8,2%",
+      "icon": "ShoppingBag",
+      "positive": true
+    },
+    {
+      "label": "Товары",
+      "value": "126",
+      "change": "+4 новых",
+      "icon": "Package",
+      "positive": true
+    },
+    {
+      "label": "Покупатели",
+      "value": "312",
+      "change": "−2,1%",
+      "icon": "Users",
+      "positive": false
+    }
+  ],
+  "customers": [
+    {
+      "id": 1,
+      "name": "Иван Петров",
+      "email": "ivan.petrov@example.com",
+      "orders": 3,
+      "status": "Активен"
+    },
+    {
+      "id": 2,
+      "name": "Анна Смирнова",
+      "email": "anna.smirnova@example.com",
+      "orders": 2,
+      "status": "Активен"
+    },
+    {
+      "id": 3,
+      "name": "Максим Иванов",
+      "email": "maxim.ivanov@example.com",
+      "orders": 5,
+      "status": "Активен"
+    },
+    {
+      "id": 4,
+      "name": "Елена Козлова",
+      "email": "elena.kozlova@example.com",
+      "orders": 1,
+      "status": "Неактивен"
+    }
+  ],
+  "settings": [
+    {
+      "id": "storeName",
+      "label": "Название магазина",
+      "value": "PC Shop",
+      "type": "text"
+    },
+    {
+      "id": "supportEmail",
+      "label": "Email поддержки",
+      "value": "support@pcshop.ru",
+      "type": "email"
+    },
+    {
+      "id": "freeShippingFrom",
+      "label": "Бесплатная доставка от, ₽",
+      "value": "10000",
+      "type": "number"
+    },
+    {
+      "id": "warrantyYears",
+      "label": "Гарантия, лет",
+      "value": "2",
+      "type": "number"
+    }
+  ]
+}

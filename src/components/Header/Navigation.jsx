@@ -1,10 +1,9 @@
 import NavItem from "./NavItem";
+import { useSiteData } from "../../hooks/useAdminContent";
 
 function Navigation({ onNavigate }) {
-  const navigationItems = [
-    { label: "Главная", path: "/" },
-    { label: "Комплектующие", path: "/products" },
-  ];
+  const { data } = useSiteData();
+  const navigationItems = data?.navigation ?? [];
 
   return (
     <nav className="flex flex-col gap-3 md:flex-row md:items-center md:gap-6">

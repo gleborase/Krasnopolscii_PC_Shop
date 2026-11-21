@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { fetchProducts, getErrorMessage } from "../api/productsApi";
+import { fetchProducts } from "../api/productsApi";
+import { getErrorMessage } from "../api/http";
 
 export function useProducts() {
   const [products, setProducts] = useState([]);

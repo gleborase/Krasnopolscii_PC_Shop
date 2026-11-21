@@ -1,7 +1,7 @@
 
 import CategoryActions from "./CategoryActions";
 
-function CategoriesTable({ categories, onEdit, onDelete }) {
+function CategoriesTable({ categories, onEdit, onDelete, disabled }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
       <div className="overflow-x-auto">
@@ -40,6 +40,7 @@ function CategoriesTable({ categories, onEdit, onDelete }) {
                     category={category}
                     onEdit={onEdit}
                     onDelete={onDelete}
+                    disabled={disabled}
                   />
                 </td>
               </tr>
