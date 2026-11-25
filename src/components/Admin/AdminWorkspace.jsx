@@ -4,6 +4,8 @@ import StatCard from "./Dashboard/StatCard";
 import RecentOrders from "./Dashboard/RecentOrders";
 import OrdersChart from "./Dashboard/OrdersChart";
 import CategoryChart from "./Dashboard/CategoryChart";
+import StatusAmounts from "./Dashboard/StatusAmounts";
+import OutOfStockList from "./Dashboard/OutOfStockList";
 
 import { useDashboardData } from "../../hooks/useDashboardData";
 import { getDashboardStats } from "../../utils/dashboardStats";
@@ -73,9 +75,21 @@ function AdminWorkspace() {
       )}
 
       {isLoading ? (
-        <div className="h-64 animate-pulse rounded-2xl bg-gray-200" />
+        <div className="h-80 animate-pulse rounded-2xl bg-gray-200" />
       ) : (
         <RecentOrders orders={orders} />
+      )}
+
+      {isLoading ? (
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div className="h-72 animate-pulse rounded-2xl bg-gray-200" />
+          <div className="h-72 animate-pulse rounded-2xl bg-gray-200" />
+        </div>
+      ) : (
+        <div className="grid gap-6 lg:grid-cols-2">
+          <StatusAmounts orders={orders} />
+          <OutOfStockList products={products} />
+        </div>
       )}
     </div>
   );

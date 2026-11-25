@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom";
+import { getRecentOrders } from "../../../utils/dashboardDetails";
+
 const statusStyles = {
   "Выполнен": "bg-emerald-500/15 text-emerald-400",
   "В обработке": "bg-amber-500/15 text-amber-400",
@@ -5,6 +8,8 @@ const statusStyles = {
 };
 
 function RecentOrders({ orders }) {
+  const recentOrders = getRecentOrders(orders);
+
   return (
     <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
       <div className="flex flex-col gap-2 border-b border-gray-200 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
@@ -15,54 +20,59 @@ function RecentOrders({ orders }) {
           </p>
         </div>
 
-        <span className="w-fit rounded-lg bg-emerald-900/15 px-3 py-1.5 text-xs font-semibold text-emerald-900">
-          Всего: {orders.length}
-        </span>
+        <div className="flex items-center gap-3">
+          <span className="rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-600">
+            Показано {recentOrders.length} из {orders.length}
+          </span>
+          <Link
+            to="/admin/orders"
+            className="text-sm font-semibold text-emerald-800 hover:text-emerald-950"
+          >
+            Все заказы
+          </Link>
+        </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[650px] text-left text-sm">
-          <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
-            <tr>
-              <th className="px-6 py-3 font-semibold">Заказ</th>
-              <th className="px-6 py-3 font-semibold">Покупатель</th>
-              <th className="px-6 py-3 font-semibold">Дата</th>
-              <th className="px-6 py-3 font-semibold">Сумма</th>
-              <th className="px-6 py-3 font-semibold">Статус</th>
-            </tr>
-          </thead>
+      {recentOrders.length === 0 ? (
+        <p className="px-6 py-10 text-center text-sm text-gray-500">
+          Заказов пока нет.
+        </p>
+      ) : (
+        <ul className="divide-y divide-gray-100">
+          {recentOrders.map((order) => (
+            <li
+              key={order.id}
+              className="flex min-w-0 flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:px-6"
+            >
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-emerald-900/10 text-sm font-bold text-emerald-900">
+                {(order.customer || "?").trim().charAt(0).toUpperCase()}
+              </span>
 
-          <tbody className="divide-y divide-gray-200">
-            {orders.map((order) => (
-              <tr key={order.id} className="text-gray-700 hover:bg-gray-50">
-                <td className="px-6 py-4 font-semibold text-gray-900">{order.id}</td>
-                <td className="px-6 py-4">{order.customer}</td>
-                <td className="px-6 py-4">{order.date}</td>
-                <td className="px-6 py-4 font-medium">
-                  {Number(order.amount).toLocaleString("ru-RU")} ₽
-                </td>
-                <td className="px-6 py-4">
-                  <span
-                    className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${
-                      statusStyles[order.status] ?? statusStyles["Ожидает оплаты"]
-                    }`}
-                  >
-                    {order.status}
-                  </span>
-                </td>
-              </tr>
-            ))}
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-semibold text-gray-900">
+                  {order.customer || "Покупатель не указан"}
+                </p>
+                <p className="mt-1 text-xs text-gray-500">
+                  {order.id} · {order.date || "Дата не указана"}
+                </p>
+              </div>
 
-            {orders.length === 0 && (
-              <tr>
-                <td colSpan={5} className="px-6 py-10 text-center text-gray-500">
-                  Заказов пока нет.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+              <div className="flex items-center justify-between gap-3 sm:justify-end">
+                <span className="text-sm font-semibold text-gray-900">
+                  {(Number(order.amount) || 0).toLocaleString("ru-RU")} ₽
+                </span>
+                <span
+                  className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${
+                    statusStyles[order.status] ?? "bg-gray-100 text-gray-600"
+                  }`}
+                >
+                  {order.status || "Без статуса"}
+                </span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </section>
   );
 }
