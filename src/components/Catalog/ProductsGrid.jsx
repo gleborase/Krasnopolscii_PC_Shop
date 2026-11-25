@@ -1,4 +1,5 @@
 import ProductCard from "../Products/ProductCard";
+import { getCategoryName } from "../../utils/productCategories";
 
 function getProductsWord(count) {
   const lastTwo = count % 100;
@@ -10,7 +11,7 @@ function getProductsWord(count) {
   return "товаров";
 }
 
-function ProductsGrid({ products, total, onReset }) {
+function ProductsGrid({ products, categories, total, onReset }) {
   const count = total ?? products.length;
   if (products.length === 0) {
     return (
@@ -41,7 +42,7 @@ function ProductsGrid({ products, total, onReset }) {
           <ProductCard
             key={item.id}
             title={item.title}
-            category={item.category}
+            category={getCategoryName(item.categoryId, categories)}
             image={item.image}
             price={item.price}
             path={item.path}

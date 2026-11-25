@@ -37,6 +37,23 @@ export function getRecentOrders(orders) {
     .slice(0, RECENT_ORDERS_LIMIT);
 }
 
+export function getAmountByDate(orders) {
+  const totals = orders.reduce((result, order) => {
+    const date = order.date || "Без даты";
+    result[date] = (result[date] ?? 0) + (Number(order.amount) || 0);
+    return result;
+  }, {});
+
+  return Object.entries(totals)
+    .map(([date, amount]) => ({ date, amount, value: getDateValue(date) }))
+    .sort((a, b) => {
+      if (a.value === -1) return 1;
+      if (b.value === -1) return -1;
+      return a.value - b.value;
+    })
+    .map(({ date, amount }) => ({ date, amount }));
+}
+
 export function getAmountByStatus(orders) {
   return orders.reduce((totals, order) => {
     const status = order.status || "Без статуса";

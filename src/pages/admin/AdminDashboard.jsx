@@ -1,8 +1,98 @@
 
-import AdminWorkspace from "../../components/Admin/AdminWorkspace";
+import ErrorMessage from "../../components/UI/ErrorMessage";
+import StatCard from "../../components/Admin/Dashboard/StatCard";
+import RecentOrders from "../../components/Admin/Dashboard/RecentOrders";
+import OrdersChart from "../../components/Admin/Dashboard/OrdersChart";
+import CategoryChart from "../../components/Admin/Dashboard/CategoryChart";
+import StatusAmounts from "../../components/Admin/Dashboard/StatusAmounts";
+import OutOfStockList from "../../components/Admin/Dashboard/OutOfStockList";
+
+import { useDashboardData } from "../../hooks/useDashboardData";
+import { getDashboardStats } from "../../utils/dashboardStats";
 
 function AdminDashboard() {
-  return <AdminWorkspace />;
+  const {
+    products,
+    categories,
+    orders,
+    customers,
+    isLoading,
+    error,
+    refetch,
+  } = useDashboardData();
+
+  if (error) {
+    return <ErrorMessage message={error} onRetry={refetch} />;
+  }
+
+  const stats = getDashboardStats({
+    products,
+    categories,
+    orders,
+    customers,
+  });
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-lg font-bold text-gray-900">
+          Добро пожаловать!
+        </h2>
+
+        <p className="mt-1 text-sm text-gray-500">
+          Сводка по интернет-магазину PC Shop. Показатели рассчитываются по
+          данным сервера; заказы и покупатели — демонстрационные.
+        </p>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {isLoading
+          ? Array.from({ length: 4 }, (_, index) => (
+              <div
+                key={index}
+                className="h-36 animate-pulse rounded-2xl bg-gray-200"
+              />
+            ))
+          : stats.map((item) => (
+              <StatCard key={item.label} {...item} />
+            ))}
+      </div>
+
+      {isLoading ? (
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div className="h-80 animate-pulse rounded-2xl bg-gray-200" />
+          <div className="h-80 animate-pulse rounded-2xl bg-gray-200" />
+        </div>
+      ) : (
+        <div className="grid gap-6 lg:grid-cols-2">
+          <OrdersChart orders={orders} />
+
+          <CategoryChart
+            categories={categories}
+            products={products}
+          />
+        </div>
+      )}
+
+      {isLoading ? (
+        <div className="h-80 animate-pulse rounded-2xl bg-gray-200" />
+      ) : (
+        <RecentOrders orders={orders} />
+      )}
+
+      {isLoading ? (
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div className="h-72 animate-pulse rounded-2xl bg-gray-200" />
+          <div className="h-72 animate-pulse rounded-2xl bg-gray-200" />
+        </div>
+      ) : (
+        <div className="grid gap-6 lg:grid-cols-2">
+          <StatusAmounts orders={orders} />
+          <OutOfStockList products={products} />
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default AdminDashboard;

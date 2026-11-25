@@ -35,13 +35,19 @@ function FiltersPanel({
       </h2>
 
       <FilterGroup title="Категория">
-        {categories.map((name) => (
+        {categories.map((category) => (
           <CheckboxRow
-            key={name}
-            label={name}
-            count={showCounts ? (counts[name] ?? 0) : undefined}
-            checked={filters.categories.includes(name)}
-            onChange={() => dispatch({ type: "toggleCategory", value: name })}
+            key={category.id}
+            label={category.name}
+            count={
+              showCounts
+                ? (counts.categories[category.id] ?? 0)
+                : undefined
+            }
+            checked={filters.categories.includes(category.id)}
+            onChange={() =>
+              dispatch({ type: "toggleCategory", value: category.id })
+            }
           />
         ))}
       </FilterGroup>
@@ -52,7 +58,7 @@ function FiltersPanel({
             <CheckboxRow
               key={name}
               label={name}
-              count={counts[name] ?? 0}
+              count={counts.brands[name] ?? 0}
               checked={filters.brands.includes(name)}
               onChange={() => dispatch({ type: "toggleBrand", value: name })}
             />

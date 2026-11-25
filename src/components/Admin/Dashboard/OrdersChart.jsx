@@ -1,20 +1,7 @@
+import { getAmountByDate } from "../../../utils/dashboardDetails";
 
 function OrdersChart({ orders }) {
-  const groupedOrders = orders.reduce((result, order) => {
-    const date = order.date;
-
-    if (!result[date]) {
-      result[date] = 0;
-    }
-
-    result[date] += Number(order.amount) || 0;
-
-    return result;
-  }, {});
-
-  const chartData = Object.entries(groupedOrders).map(
-    ([date, amount]) => ({ date, amount })
-  );
+  const chartData = getAmountByDate(orders);
 
   const maxAmount = Math.max(
     ...chartData.map((item) => item.amount),

@@ -2,8 +2,9 @@ import HeaderSection from "../Categories/HeaderSection";
 import ProductCard from "./ProductCard";
 import LoadingSkeleton from "../UI/LoadingSkeleton";
 import ErrorMessage from "../UI/ErrorMessage";
+import { getCategoryName } from "../../utils/productCategories";
 
-function ProductsSection({ products, isLoading, error, onRetry }) {
+function ProductsSection({ products, categories, isLoading, error, onRetry }) {
   const popularProducts = products.filter((item) => item.popular);
 
   return (
@@ -26,7 +27,7 @@ function ProductsSection({ products, isLoading, error, onRetry }) {
               <ProductCard
                 key={item.id}
                 title={item.title}
-                category={item.category}
+                category={getCategoryName(item.categoryId, categories)}
                 image={item.image}
                 price={item.price}
                 path={item.path}

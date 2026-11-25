@@ -1,10 +1,11 @@
 import { X } from "lucide-react";
+import { getCategoryName } from "../../utils/productCategories";
 
-function ActiveFilters({ filters, dispatch, onReset }) {
+function ActiveFilters({ filters, dispatch, onReset, categories }) {
   const chips = [
     ...filters.categories.map((value) => ({
       key: `category-${value}`,
-      label: value,
+      label: getCategoryName(value, categories),
       action: { type: "toggleCategory", value },
     })),
     ...filters.brands.map((value) => ({

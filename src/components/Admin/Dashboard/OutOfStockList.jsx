@@ -14,7 +14,7 @@ function OutOfStockList({ products }) {
             Товары, требующие пополнения
           </p>
         </div>
-        <span className="shrink-0 rounded-lg bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-700">
+        <span className="rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-700">
           Всего: {total}
         </span>
       </div>

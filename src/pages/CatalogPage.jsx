@@ -19,7 +19,12 @@ const PAGE_SIZE = 6;
 function CatalogPage() {
   const { products, isLoading, error, refetch } = useProducts();
   const { filters, dispatch, activeCount } = useCatalogFilters();
-  const { categories } = useCategories();
+  const {
+    categories,
+    isLoading: isCategoriesLoading,
+    error: categoriesError,
+    refetch: refetchCategories,
+  } = useCategories();
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -29,8 +34,8 @@ function CatalogPage() {
   const counts = useMemo(() => getCounts(products), [products]);
 
   const visibleProducts = useMemo(
-    () => filterProducts(products, { ...filters, query }),
-    [products, filters, query]
+    () => filterProducts(products, { ...filters, query }, categories),
+    [products, filters, query, categories]
   );
 
   const totalPages = Math.max(1, Math.ceil(visibleProducts.length / PAGE_SIZE));
@@ -54,6 +59,14 @@ function CatalogPage() {
     dispatch({ type: "reset" });
     setSearchParams({}, { replace: true });
   }
+
+  function retryLoading() {
+    refetch();
+    refetchCategories();
+  }
+
+  const pageError = error ?? categoriesError;
+  const pageIsLoading = isLoading || isCategoriesLoading;
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-8 md:px-6 md:py-12">
@@ -82,7 +95,7 @@ function CatalogPage() {
               dispatch={dispatch}
               brands={brands}
               counts={counts}
-              categories={categories.map((category) => category.name)}
+              categories={categories}
               activeCount={activeCount}
               onReset={resetAll}
             />
@@ -90,10 +103,10 @@ function CatalogPage() {
         </div>
 
         <div>
-          {isLoading ? (
+          {pageIsLoading ? (
             <LoadingSkeleton />
-          ) : error ? (
-            <ErrorMessage message={error} onRetry={refetch} />
+          ) : pageError ? (
+            <ErrorMessage message={pageError} onRetry={retryLoading} />
           ) : (
             <>
               <CatalogToolbar
@@ -102,9 +115,15 @@ function CatalogPage() {
                 sortType={filters.sortType}
                 onSortChange={(value) => dispatch({ type: "setSortType", value })}
               />
-              <ActiveFilters filters={filters} dispatch={dispatch} onReset={resetAll} />
+              <ActiveFilters
+                filters={filters}
+                dispatch={dispatch}
+                onReset={resetAll}
+                categories={categories}
+              />
               <ProductsGrid
                 products={pageProducts}
+                categories={categories}
                 total={visibleProducts.length}
                 onReset={resetAll}
               />

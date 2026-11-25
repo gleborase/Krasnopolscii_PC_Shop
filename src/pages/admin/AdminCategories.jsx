@@ -16,7 +16,18 @@ function AdminCategories() {
     renameCategory,
     removeCategory,
   } = useCategories();
-  const { products, isLoading: isProductsLoading } = useProducts();
+  const {
+    products,
+    isLoading: isProductsLoading,
+    error: productsError,
+    refetch: refetchProducts,
+  } = useProducts();
+  const categoriesWithCounts = categories.map((category) => ({
+    ...category,
+    count: products.filter(
+      (product) => product.categoryId === category.id
+    ).length,
+  }));
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
@@ -86,6 +97,17 @@ function AdminCategories() {
   }
 
   async function handleDelete(categoryId) {
+    const linkedProducts = products.filter(
+      (product) => product.categoryId === categoryId
+    );
+
+    if (linkedProducts.length > 0) {
+      setActionError(
+        `Нельзя удалить категорию: к ней привязано товаров — ${linkedProducts.length}. Сначала перенесите товары в другую категорию.`
+      );
+      return;
+    }
+
     const confirmed = window.confirm(
       "Вы действительно хотите удалить эту категорию?"
     );
@@ -182,15 +204,17 @@ function AdminCategories() {
           </p>
         )}
 
-        {isLoading ? (
+        {isLoading || isProductsLoading ? (
           <div className="rounded-2xl border border-gray-200 bg-white p-10 text-center text-sm text-gray-500">
             Загрузка категорий...
           </div>
         ) : loadError ? (
           <ErrorMessage message={loadError} onRetry={refetch} />
+        ) : productsError ? (
+          <ErrorMessage message={productsError} onRetry={refetchProducts} />
         ) : (
           <CategoriesTable
-            categories={categories}
+            categories={categoriesWithCounts}
             onEdit={openEditForm}
             onDelete={handleDelete}
             disabled={isSaving}

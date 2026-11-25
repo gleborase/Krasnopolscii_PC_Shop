@@ -4,10 +4,26 @@ import { useProduct } from "../hooks/useProduct";
 import ProductPrice from "../components/Products/ProductPrice";
 import ProductPageSkeleton from "../components/UI/ProductPageSkeleton";
 import ErrorMessage from "../components/UI/ErrorMessage";
+import { useCategories } from "../hooks/useCategories";
+import { getCategoryName } from "../utils/productCategories";
 
 function ProductPage() {
   const { id } = useParams();
-  const { product, isLoading, isNotFound, error, refetch } = useProduct(id);
+  const {
+    product,
+    isLoading: isProductLoading,
+    isNotFound,
+    error: productError,
+    refetch: refetchProduct,
+  } = useProduct(id);
+  const categoryData = useCategories();
+  const isLoading = isProductLoading || categoryData.isLoading;
+  const error = productError ?? categoryData.error;
+
+  function retryLoading() {
+    refetchProduct();
+    categoryData.refetch();
+  }
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-12 md:px-6">
@@ -28,7 +44,7 @@ function ProductPage() {
           </p>
         </div>
       ) : error ? (
-        <ErrorMessage message={error} onRetry={refetch} />
+        <ErrorMessage message={error} onRetry={retryLoading} />
       ) : (
         <div className="grid gap-8 md:grid-cols-2">
           <img
@@ -39,7 +55,7 @@ function ProductPage() {
 
           <div className="flex flex-col gap-3">
             <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
-              {product.category}
+              {getCategoryName(product.categoryId, categoryData.categories)}
             </p>
             <h1 className="text-3xl font-semibold text-gray-900">{product.title}</h1>
             <ProductPrice price={product.price} />

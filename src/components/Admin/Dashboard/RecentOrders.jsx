@@ -26,7 +26,7 @@ function RecentOrders({ orders }) {
           </span>
           <Link
             to="/admin/orders"
-            className="text-sm font-semibold text-emerald-800 hover:text-emerald-950"
+            className="text-sm font-semibold text-emerald-800 hover:text-emerald-900"
           >
             Все заказы
           </Link>

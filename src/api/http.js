@@ -1,4 +1,6 @@
-const API_URL = "http://localhost:3001";
+const API_URL = (
+  import.meta.env.VITE_API_URL || "http://localhost:3001"
+).replace(/\/+$/, "");
 const TIMEOUT_MS = 8000;
 
 export class ApiError extends Error {

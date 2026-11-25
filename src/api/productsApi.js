@@ -4,6 +4,7 @@ function toProduct(item) {
   return {
     ...item,
     id: Number(item.id),
+    categoryId: Number(item.categoryId),
     path: `/products/${item.id}`,
     description:
       item.description ??

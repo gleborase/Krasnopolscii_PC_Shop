@@ -2,19 +2,38 @@
 import { useState } from "react";
 import { Search, Package } from "lucide-react";
 import { useProducts } from "../../hooks/useProducts";
+import { useCategories } from "../../hooks/useCategories";
 import ErrorMessage from "../../components/UI/ErrorMessage";
+import { getCategoryName } from "../../utils/productCategories";
 
 function AdminProducts() {
   const [search, setSearch] = useState("");
-  const { products, isLoading, error, refetch } = useProducts();
+  const {
+    products,
+    isLoading: isProductsLoading,
+    error: productsError,
+    refetch: refetchProducts,
+  } = useProducts();
+  const categoryData = useCategories();
+  const isLoading = isProductsLoading || categoryData.isLoading;
+  const error = productsError ?? categoryData.error;
+
+  function retryLoading() {
+    refetchProducts();
+    categoryData.refetch();
+  }
 
   const filteredProducts = products.filter((product) => {
     const query = search.toLowerCase();
+    const categoryName = getCategoryName(
+      product.categoryId,
+      categoryData.categories
+    );
 
     return (
       product.title.toLowerCase().includes(query) ||
       product.brand.toLowerCase().includes(query) ||
-      product.category.toLowerCase().includes(query)
+      categoryName.toLowerCase().includes(query)
     );
   });
 
@@ -52,7 +71,7 @@ function AdminProducts() {
           Загрузка товаров...
         </div>
       ) : error ? (
-        <ErrorMessage message={error} onRetry={refetch} />
+        <ErrorMessage message={error} onRetry={retryLoading} />
       ) : (
       <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
         <div className="overflow-x-auto">
@@ -82,7 +101,9 @@ function AdminProducts() {
                   </td>
 
                   <td className="px-5 py-4">{product.brand}</td>
-                  <td className="px-5 py-4">{product.category}</td>
+                  <td className="px-5 py-4">
+                    {getCategoryName(product.categoryId, categoryData.categories)}
+                  </td>
 
                   <td className="px-5 py-4 font-semibold text-gray-900">
                     {product.price.toLocaleString("ru-RU")} ₽

@@ -8,10 +8,6 @@ export function fetchOrders(signal) {
   return request("/orders", { signal });
 }
 
-export function fetchStatistics(signal) {
-  return request("/statistics", { signal });
-}
-
 export function fetchCustomers(signal) {
   return request("/customers", { signal });
 }

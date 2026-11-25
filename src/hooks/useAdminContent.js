@@ -4,7 +4,6 @@ import {
   fetchOrders,
   fetchSettings,
   fetchSiteData,
-  fetchStatistics,
 } from "../api/adminContentApi";
 import { getErrorMessage } from "../api/http";
 
@@ -46,10 +45,6 @@ export function useSiteData() {
 
 export function useOrders() {
   return useApiResource(fetchOrders);
-}
-
-export function useStatistics() {
-  return useApiResource(fetchStatistics);
 }
 
 export function useCustomers() {

@@ -15,7 +15,7 @@ const sorters = {
   popular: (a, b) => Number(Boolean(b.popular)) - Number(Boolean(a.popular)),
 };
 
-export function filterProducts(products, filters) {
+export function filterProducts(products, filters, categoryList = []) {
   const {
     query,
     categories,
@@ -30,12 +30,21 @@ export function filterProducts(products, filters) {
   const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
   const min = minPrice === "" ? null : Number(minPrice);
   const max = maxPrice === "" ? null : Number(maxPrice);
+  const categoryNames = new Map(
+    categoryList.map((category) => [category.id, category.name])
+  );
 
   const result = products.filter((item) => {
-    const text = `${item.title} ${item.category}`.toLowerCase();
+    const categoryName = categoryNames.get(item.categoryId) ?? "";
+    const text = `${item.title} ${categoryName}`.toLowerCase();
 
     if (!words.every((word) => text.includes(word))) return false;
-    if (categories.length > 0 && !categories.includes(item.category)) return false;
+    if (
+      categories.length > 0 &&
+      !categories.includes(item.categoryId)
+    ) {
+      return false;
+    }
     if (brands.length > 0 && !brands.includes(item.brand)) return false;
     if (min !== null && item.price < min) return false;
     if (max !== null && item.price > max) return false;

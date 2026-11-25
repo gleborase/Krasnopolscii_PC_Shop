@@ -2,7 +2,7 @@
 function CategoryChart({ categories, products }) {
   const chartData = categories.map((category) => {
     const count = products.filter(
-      (product) => product.category === category.name
+      (product) => product.categoryId === category.id
     ).length;
 
     return {
