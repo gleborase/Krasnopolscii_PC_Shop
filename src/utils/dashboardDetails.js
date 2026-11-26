@@ -27,14 +27,16 @@ function getOrderNumber(id) {
   return match ? Number(match[1]) : Number.NEGATIVE_INFINITY;
 }
 
+export function sortOrdersNewestFirst(orders) {
+  return [...orders].sort((a, b) => {
+    const dateDifference = getDateValue(b.date) - getDateValue(a.date);
+    if (dateDifference !== 0) return dateDifference;
+    return getOrderNumber(b.id) - getOrderNumber(a.id);
+  });
+}
+
 export function getRecentOrders(orders) {
-  return [...orders]
-    .sort((a, b) => {
-      const dateDifference = getDateValue(b.date) - getDateValue(a.date);
-      if (dateDifference !== 0) return dateDifference;
-      return getOrderNumber(b.id) - getOrderNumber(a.id);
-    })
-    .slice(0, RECENT_ORDERS_LIMIT);
+  return sortOrdersNewestFirst(orders).slice(0, RECENT_ORDERS_LIMIT);
 }
 
 export function getAmountByDate(orders) {

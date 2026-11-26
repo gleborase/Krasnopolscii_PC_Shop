@@ -1,8 +1,9 @@
 import ErrorMessage from "../../components/UI/ErrorMessage";
 import { useOrders } from "../../hooks/useAdminContent";
+import { sortOrdersNewestFirst } from "../../utils/dashboardDetails";
 
 const STATUS_STYLES = {
-  Выполнен: "bg-emerald-500/15 text-emerald-400",
+  "Выполнен": "bg-emerald-500/15 text-emerald-400",
   "В обработке": "bg-amber-500/15 text-amber-400",
   "Ожидает оплаты": "bg-orange-500/15 text-orange-300",
 };
@@ -15,7 +16,7 @@ function formatAmount(amount) {
 
 function AdminOrders() {
   const { data: orders, isLoading, error, refetch } = useOrders();
-  const list = orders ?? [];
+  const list = sortOrdersNewestFirst(orders ?? []);
   const completedCount = list.filter(
     (order) => order.status === "Выполнен",
   ).length;
