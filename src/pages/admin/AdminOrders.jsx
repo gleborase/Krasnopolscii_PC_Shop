@@ -1,22 +1,22 @@
+import { useMemo } from "react";
+import OrdersTable from "../../components/Admin/Orders/OrdersTable";
+import OrdersToolbar from "../../components/Admin/Orders/OrdersToolbar";
 import ErrorMessage from "../../components/UI/ErrorMessage";
+import { useOrderFilters } from "../../hooks/useOrderFilters";
 import { useOrders } from "../../hooks/useAdminContent";
 import { sortOrdersNewestFirst } from "../../utils/dashboardDetails";
-
-const STATUS_STYLES = {
-  "Выполнен": "bg-emerald-500/15 text-emerald-400",
-  "В обработке": "bg-amber-500/15 text-amber-400",
-  "Ожидает оплаты": "bg-orange-500/15 text-orange-300",
-};
-
-function formatAmount(amount) {
-  const value = Number(amount);
-
-  return Number.isFinite(value) ? `${value.toLocaleString("ru-RU")} ₽` : "—";
-}
+import { filterOrders, getStatusOptions } from "../../utils/filterOrders";
 
 function AdminOrders() {
   const { data: orders, isLoading, error, refetch } = useOrders();
-  const list = sortOrdersNewestFirst(orders ?? []);
+  const { filters, dispatch, activeCount } = useOrderFilters();
+
+  const list = useMemo(() => sortOrdersNewestFirst(orders ?? []), [orders]);
+  const visibleOrders = useMemo(
+    () => filterOrders(list, filters),
+    [list, filters],
+  );
+  const statusOptions = useMemo(() => getStatusOptions(list), [list]);
   const completedCount = list.filter(
     (order) => order.status === "Выполнен",
   ).length;
@@ -64,73 +64,25 @@ function AdminOrders() {
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[650px] text-left text-sm">
-                <caption className="sr-only">
-                  Список заказов с основными сведениями
-                </caption>
-                <thead className="bg-gray-50 text-xs uppercase text-gray-500">
-                  <tr>
-                    <th scope="col" className="px-5 py-4">
-                      Номер заказа
-                    </th>
-                    <th scope="col" className="px-5 py-4">
-                      Покупатель
-                    </th>
-                    <th scope="col" className="px-5 py-4">
-                      Дата
-                    </th>
-                    <th scope="col" className="px-5 py-4">
-                      Сумма
-                    </th>
-                    <th scope="col" className="px-5 py-4">
-                      Статус
-                    </th>
-                  </tr>
-                </thead>
+          {list.length > 0 && (
+            <OrdersToolbar
+              query={filters.query}
+              status={filters.status}
+              statusOptions={statusOptions}
+              foundCount={visibleOrders.length}
+              totalCount={list.length}
+              activeCount={activeCount}
+              onQueryChange={(value) => dispatch({ type: "setQuery", value })}
+              onStatusChange={(value) => dispatch({ type: "setStatus", value })}
+              onReset={() => dispatch({ type: "reset" })}
+            />
+          )}
 
-                <tbody className="divide-y divide-gray-100">
-                  {list.length === 0 ? (
-                    <tr>
-                      <td
-                        colSpan={5}
-                        className="px-5 py-10 text-center text-gray-500"
-                      >
-                        Заказов пока нет.
-                      </td>
-                    </tr>
-                  ) : (
-                    list.map((order) => (
-                      <tr
-                        key={order.id}
-                        className="text-gray-700 hover:bg-gray-50"
-                      >
-                        <td className="px-5 py-4 font-semibold text-gray-900">
-                          {order.id ?? "—"}
-                        </td>
-                        <td className="px-5 py-4">{order.customer || "—"}</td>
-                        <td className="px-5 py-4">{order.date || "—"}</td>
-                        <td className="px-5 py-4 font-medium">
-                          {formatAmount(order.amount)}
-                        </td>
-                        <td className="px-5 py-4">
-                          <span
-                            className={`rounded-full px-2.5 py-1 text-xs font-medium ${
-                              STATUS_STYLES[order.status] ??
-                              "bg-gray-100 text-gray-700"
-                            }`}
-                          >
-                            {order.status || "Без статуса"}
-                          </span>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <OrdersTable
+            orders={visibleOrders}
+            hasOrders={list.length > 0}
+            onReset={() => dispatch({ type: "reset" })}
+          />
         </>
       )}
     </section>
