@@ -113,7 +113,7 @@ function AdminProducts() {
                     <span
                       className={`rounded-full px-2.5 py-1 text-xs font-medium ${
                         product.inStock
-                          ? "bg-emerald-500/15 text-emerald-700"
+                          ? "bg-emerald-500/15 text-emerald-400"
                           : "bg-red-500/10 text-red-600"
                       }`}
                     >

@@ -1,9 +1,9 @@
 import { getAmountByStatus } from "../../../utils/dashboardDetails";
 
 const statusColors = {
-  "Выполнен": "bg-emerald-700",
-  "В обработке": "bg-amber-500",
-  "Ожидает оплаты": "bg-sky-600",
+  "Выполнен": "bg-emerald-400",
+  "В обработке": "bg-amber-400",
+  "Ожидает оплаты": "bg-orange-300",
 };
 
 function StatusAmounts({ orders }) {

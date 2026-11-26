@@ -30,7 +30,7 @@ function ProductCard({ title, category, image, price, path, inStock = true }) {
 
         <div className="flex items-center justify-between gap-3">
           <ProductPrice price={price} />
-          <span className={inStock ? "text-xs font-medium text-emerald-700" : "text-xs font-medium text-gray-500"}>
+          <span className={inStock ? "text-xs font-medium text-emerald-400" : "text-xs font-medium text-gray-500"}>
             {inStock ? "В наличии" : "Под заказ"}
           </span>
         </div>
