@@ -1,11 +1,6 @@
 import { Link } from "react-router-dom";
 import { getRecentOrders } from "../../../utils/dashboardDetails";
-
-const statusStyles = {
-  "Выполнен": "bg-emerald-500/15 text-emerald-400",
-  "В обработке": "bg-amber-500/15 text-amber-400",
-  "Ожидает оплаты": "bg-gray-100 text-gray-700",
-};
+import { STATUS_STYLES } from "../../../utils/orderStatuses";
 
 function RecentOrders({ orders }) {
   const recentOrders = getRecentOrders(orders);
@@ -63,7 +58,7 @@ function RecentOrders({ orders }) {
                 </span>
                 <span
                   className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${
-                    statusStyles[order.status] ?? "bg-gray-100 text-gray-600"
+                    STATUS_STYLES[order.status] ?? "bg-gray-100 text-gray-600"
                   }`}
                 >
                   {order.status || "Без статуса"}

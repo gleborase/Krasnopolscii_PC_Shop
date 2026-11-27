@@ -3,12 +3,22 @@ import OrdersTable from "../../components/Admin/Orders/OrdersTable";
 import OrdersToolbar from "../../components/Admin/Orders/OrdersToolbar";
 import ErrorMessage from "../../components/UI/ErrorMessage";
 import { useOrderFilters } from "../../hooks/useOrderFilters";
-import { useOrders } from "../../hooks/useAdminContent";
+import { useAdminOrders } from "../../hooks/useAdminOrders";
 import { sortOrdersNewestFirst } from "../../utils/dashboardDetails";
 import { filterOrders, getStatusOptions } from "../../utils/filterOrders";
 
 function AdminOrders() {
-  const { data: orders, isLoading, error, refetch } = useOrders();
+  const {
+    orders,
+    isLoading,
+    error,
+    refetch,
+    pendingIds,
+    notice,
+    actionError,
+    updateStatus,
+    clearMessages,
+  } = useAdminOrders();
   const { filters, dispatch, activeCount } = useOrderFilters();
 
   const list = useMemo(() => sortOrdersNewestFirst(orders ?? []), [orders]);
@@ -41,6 +51,38 @@ function AdminOrders() {
         <ErrorMessage message={error} onRetry={refetch} />
       ) : (
         <>
+          {notice && (
+            <div
+              role="status"
+              className="flex items-start justify-between gap-4 rounded-xl border border-emerald-400/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-400"
+            >
+              <span>{notice}</span>
+              <button
+                type="button"
+                onClick={clearMessages}
+                className="shrink-0 text-xs underline underline-offset-2"
+              >
+                Закрыть
+              </button>
+            </div>
+          )}
+
+          {actionError && (
+            <div
+              role="alert"
+              className="flex items-start justify-between gap-4 rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-400"
+            >
+              <span>{actionError}</span>
+              <button
+                type="button"
+                onClick={clearMessages}
+                className="shrink-0 text-xs underline underline-offset-2"
+              >
+                Закрыть
+              </button>
+            </div>
+          )}
+
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="rounded-2xl border border-gray-200 bg-white p-5">
               <p className="text-sm text-gray-500">Всего заказов</p>
@@ -81,6 +123,8 @@ function AdminOrders() {
           <OrdersTable
             orders={visibleOrders}
             hasOrders={list.length > 0}
+            pendingIds={pendingIds}
+            onStatusChange={updateStatus}
             onReset={() => dispatch({ type: "reset" })}
           />
         </>

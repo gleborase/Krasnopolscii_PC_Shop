@@ -1,12 +1,17 @@
 import { getOrderStatus } from "../../../utils/filterOrders";
+import {
+  STATUS_STYLES,
+  getStatusChoices,
+} from "../../../utils/orderStatuses";
 
-const STATUS_STYLES = {
-  "Выполнен": "bg-emerald-500/15 text-emerald-400",
-  "В обработке": "bg-amber-500/15 text-amber-400",
-  "Ожидает оплаты": "bg-orange-500/15 text-orange-300",
-};
-
-const COLUMNS = ["Номер заказа", "Покупатель", "Дата", "Сумма", "Статус"];
+const COLUMNS = [
+  "Номер заказа",
+  "Покупатель",
+  "Дата",
+  "Сумма",
+  "Статус",
+  "Изменить статус",
+];
 
 function formatAmount(amount) {
   const value = Number(amount);
@@ -14,11 +19,17 @@ function formatAmount(amount) {
   return Number.isFinite(value) ? `${value.toLocaleString("ru-RU")} ₽` : "—";
 }
 
-function OrdersTable({ orders, hasOrders, onReset }) {
+function OrdersTable({
+  orders,
+  hasOrders,
+  pendingIds,
+  onStatusChange,
+  onReset,
+}) {
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[650px] text-left text-sm">
+        <table className="w-full min-w-[760px] text-left text-sm">
           <caption className="sr-only">
             Список заказов с основными сведениями
           </caption>
@@ -56,28 +67,56 @@ function OrdersTable({ orders, hasOrders, onReset }) {
                 </td>
               </tr>
             ) : (
-              orders.map((order) => (
-                <tr key={order.id} className="text-gray-700 hover:bg-gray-50">
-                  <td className="px-5 py-4 font-semibold text-gray-900">
-                    {order.id ?? "—"}
-                  </td>
-                  <td className="px-5 py-4">{order.customer || "—"}</td>
-                  <td className="px-5 py-4">{order.date || "—"}</td>
-                  <td className="px-5 py-4 font-medium">
-                    {formatAmount(order.amount)}
-                  </td>
-                  <td className="px-5 py-4">
-                    <span
-                      className={`rounded-full px-2.5 py-1 text-xs font-medium ${
-                        STATUS_STYLES[order.status] ??
-                        "bg-gray-100 text-gray-700"
-                      }`}
-                    >
-                      {getOrderStatus(order)}
-                    </span>
-                  </td>
-                </tr>
-              ))
+              orders.map((order) => {
+                const isPending = pendingIds.includes(order.id);
+
+                return (
+                  <tr key={order.id} className="text-gray-700 hover:bg-gray-50">
+                    <td className="px-5 py-4 font-semibold text-gray-900">
+                      {order.id ?? "—"}
+                    </td>
+                    <td className="px-5 py-4">{order.customer || "—"}</td>
+                    <td className="px-5 py-4">{order.date || "—"}</td>
+                    <td className="px-5 py-4 font-medium">
+                      {formatAmount(order.amount)}
+                    </td>
+                    <td className="px-5 py-4">
+                      <span
+                        className={`rounded-full px-2.5 py-1 text-xs font-medium ${
+                          STATUS_STYLES[order.status] ??
+                          "bg-gray-100 text-gray-700"
+                        }`}
+                      >
+                        {getOrderStatus(order)}
+                      </span>
+                    </td>
+                    <td className="px-5 py-4">
+                      <div className="flex items-center gap-3">
+                        <select
+                          value={getOrderStatus(order)}
+                          disabled={isPending}
+                          onChange={(event) =>
+                            onStatusChange(order, event.target.value)
+                          }
+                          aria-label={`Статус заказа ${order.id}`}
+                          className="rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-sm text-gray-800 outline-none focus:border-gray-400 disabled:cursor-wait disabled:opacity-50"
+                        >
+                          {getStatusChoices(order).map((status) => (
+                            <option key={status} value={status}>
+                              {status}
+                            </option>
+                          ))}
+                        </select>
+                        {isPending && (
+                          <span className="text-xs text-gray-500">
+                            Сохранение…
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>
