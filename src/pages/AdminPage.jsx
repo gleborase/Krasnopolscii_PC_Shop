@@ -11,7 +11,11 @@ function AdminPage() {
   const { sections, isLoading, error, refetch } = useAdminSections();
 
   const activeSection =
-    sections.find((section) => section.path === location.pathname) ??
+    sections.find(
+      (section) =>
+        location.pathname === section.path ||
+        location.pathname.startsWith(`${section.path}/`),
+    ) ??
     sections[0];
 
   return (

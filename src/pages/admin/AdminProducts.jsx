@@ -1,6 +1,7 @@
 
 import { useState } from "react";
-import { Search, Package } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Search, Package, Plus } from "lucide-react";
 import { useProducts } from "../../hooks/useProducts";
 import { useCategories } from "../../hooks/useCategories";
 import ErrorMessage from "../../components/UI/ErrorMessage";
@@ -49,9 +50,19 @@ function AdminProducts() {
           </p>
         </div>
 
-        <span className="w-fit rounded-xl bg-emerald-900/10 px-4 py-2 text-sm font-semibold text-emerald-900">
-          Всего товаров: {isLoading ? "…" : products.length}
-        </span>
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="w-fit rounded-xl bg-emerald-900/10 px-4 py-2 text-sm font-semibold text-emerald-900">
+            Всего товаров: {isLoading ? "…" : products.length}
+          </span>
+
+          <Link
+            to="/admin/products/new"
+            className="inline-flex items-center gap-2 rounded-xl bg-emerald-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-800"
+          >
+            <Plus size={17} />
+            Добавить товар
+          </Link>
+        </div>
       </div>
 
       <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3">
