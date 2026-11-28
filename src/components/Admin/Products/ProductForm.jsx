@@ -1,5 +1,9 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useProductForm } from "../../../hooks/useProductForm";
+import {
+  checkImageFile,
+  readProductImage,
+} from "../../../utils/imageFile";
 import {
   PRODUCT_LIMITS,
   buildProduct,
@@ -7,6 +11,16 @@ import {
 
 const inputClass =
   "w-full rounded-lg border bg-white px-3 py-2.5 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-400";
+
+const FIELD_ORDER = [
+  "title",
+  "categoryId",
+  "price",
+  "quantity",
+  "description",
+  "brand",
+  "image",
+];
 
 function Field({ id, label, error, hint, children }) {
   return (
@@ -29,9 +43,32 @@ function Field({ id, label, error, hint, children }) {
   );
 }
 
-function ProductForm({ categories, onSubmit }) {
-  const { values, errors, isValid, getError, dispatch } = useProductForm();
+function ProductForm({
+  categories,
+  onSubmit,
+  isSaving,
+  submitError,
+  initialValues,
+  requireImage = true,
+  submitLabel = "Добавить товар",
+  resetLabel = "Очистить форму",
+  onCancel,
+}) {
+  const {
+    values,
+    errors,
+    isValid,
+    getError,
+    dispatch,
+    reset: resetForm,
+  } = useProductForm({ initialValues, requireImage });
   const fileInputRef = useRef(null);
+  const [isReadingImage, setIsReadingImage] = useState(false);
+  const [fileError, setFileError] = useState(null);
+  const imageError = fileError ?? getError("image");
+  const isBusy = isSaving || isReadingImage;
+  const imagePreview =
+    values.imageSource === "file" ? values.image : values.imageUrl.trim();
 
   function fieldProps(field) {
     const error = getError(field);
@@ -49,12 +86,44 @@ function ProductForm({ categories, onSubmit }) {
     };
   }
 
+  async function handleImageChange(event) {
+    const input = event.currentTarget;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    const problem = checkImageFile(file);
+    if (problem) {
+      setFileError(problem);
+      dispatch({ type: "clearImage" });
+      input.value = "";
+      return;
+    }
+
+    setFileError(null);
+    dispatch({ type: "clearImage" });
+    setIsReadingImage(true);
+
+    try {
+      const image = await readProductImage(file);
+      dispatch({ type: "setImage", image, imageName: file.name });
+    } catch (error) {
+      const detail =
+        error instanceof Error ? ` ${error.message}` : "";
+      setFileError(`Не удалось обработать фото.${detail}`);
+    } finally {
+      setIsReadingImage(false);
+      input.value = "";
+    }
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
+    if (isBusy) return;
+
     dispatch({ type: "submit" });
 
     if (!isValid) {
-      const firstInvalid = Object.keys(errors)[0];
+      const firstInvalid = FIELD_ORDER.find((field) => errors[field]);
       const fieldId =
         firstInvalid === "image"
           ? values.imageSource === "file"
@@ -65,26 +134,21 @@ function ProductForm({ categories, onSubmit }) {
       return;
     }
 
-    const product = buildProduct(values);
-    onSubmit({
-      ...product,
-      imagePreview:
-        values.imageSource === "file"
-          ? URL.createObjectURL(values.imageFile)
-          : values.imageUrl.trim(),
-      imageName: values.imageSource === "file" ? values.imageFile.name : "",
-    });
+    onSubmit(buildProduct(values));
   }
 
   function handleReset() {
-    dispatch({ type: "reset" });
+    setFileError(null);
+    resetForm();
     if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
   function handleImageSourceChange(imageSource) {
+    setFileError(null);
     dispatch({ type: "change", field: "imageSource", value: imageSource });
-    dispatch({ type: "change", field: "imageFile", value: null });
+    dispatch({ type: "clearImage" });
     dispatch({ type: "change", field: "imageUrl", value: "" });
+    if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
   return (
@@ -160,6 +224,14 @@ function ProductForm({ categories, onSubmit }) {
         />
       </Field>
 
+      <Field
+        id="product-brand"
+        label="Бренд"
+        error={getError("brand")}
+      >
+        <input type="text" placeholder="Например, Samsung" {...fieldProps("brand")} />
+      </Field>
+
       <fieldset className="space-y-3">
         <legend className="mb-1.5 text-sm font-medium text-gray-900">
           Фото товара
@@ -193,44 +265,42 @@ function ProductForm({ categories, onSubmit }) {
 
         {values.imageSource === "file" ? (
           <div>
-            <p className="mb-1.5 text-sm font-medium text-gray-900">
+            <label
+              htmlFor="product-image"
+              className="mb-1.5 block text-sm font-medium text-gray-900"
+            >
               Файл изображения
-            </p>
-            <input
-              ref={fileInputRef}
-              id="product-image-file"
-              name="imageFile"
-              type="file"
-              accept="image/*"
-              aria-label="Файл изображения"
-              tabIndex={-1}
-              className="sr-only"
-              onChange={(event) =>
-                dispatch({
-                  type: "change",
-                  field: "imageFile",
-                  value: event.target.files?.[0] ?? null,
-                })
-              }
-              onBlur={() => dispatch({ type: "blur", field: "image" })}
-            />
+            </label>
             <div className="flex flex-wrap items-center gap-3">
+              <input
+                ref={fileInputRef}
+                id="product-image"
+                name="image"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                aria-label="Фото товара"
+                tabIndex={-1}
+                className="sr-only"
+                onChange={handleImageChange}
+                onBlur={() => dispatch({ type: "blur", field: "image" })}
+              />
               <button
                 id="product-image-file-trigger"
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                aria-invalid={getError("image") ? "true" : "false"}
+                disabled={isBusy}
+                aria-invalid={imageError ? "true" : "false"}
                 aria-describedby={
-                  getError("image") ? "product-image-error" : undefined
+                  imageError ? "product-image-error" : undefined
                 }
                 className={`rounded-lg border px-3 py-2 text-sm text-gray-700 transition hover:bg-gray-50 ${
-                  getError("image") ? "border-red-400" : "border-gray-200"
-                }`}
+                  imageError ? "border-red-400" : "border-gray-200"
+                } disabled:cursor-wait disabled:opacity-50`}
               >
                 Обзор
               </button>
               <span className="text-sm text-gray-500">
-                {values.imageFile?.name ?? "Файл не выбран"}
+                {values.imageName || "Файл не выбран"}
               </span>
             </div>
           </div>
@@ -255,38 +325,79 @@ function ProductForm({ categories, onSubmit }) {
                 })
               }
               onBlur={() => dispatch({ type: "blur", field: "image" })}
+              disabled={isBusy}
               placeholder="https://example.com/product.jpg"
-              aria-invalid={getError("image") ? "true" : "false"}
+              aria-invalid={imageError ? "true" : "false"}
               aria-describedby={
-                getError("image") ? "product-image-error" : undefined
+                imageError ? "product-image-error" : undefined
               }
               className={`${inputClass} ${
-                getError("image") ? "border-red-400" : "border-gray-200"
-              }`}
+                imageError ? "border-red-400" : "border-gray-200"
+              } disabled:opacity-50`}
             />
           </div>
         )}
 
-        {getError("image") && (
+        {imageError && (
           <p id="product-image-error" className="text-xs text-red-400">
-            {getError("image")}
+            {imageError}
           </p>
         )}
+
+        {isReadingImage && (
+          <p className="text-xs text-gray-500">Загрузка фото…</p>
+        )}
+
+        {imagePreview && (
+          <div className="flex items-start gap-4">
+            <img
+              src={imagePreview}
+              alt="Предварительный просмотр фото товара"
+              className="size-24 rounded-lg border border-gray-200 bg-white object-cover"
+            />
+            {values.imageName && (
+              <p className="break-all text-xs text-gray-500">
+                {values.imageName}
+              </p>
+            )}
+          </div>
+        )}
       </fieldset>
+
+      {submitError && (
+        <p
+          role="alert"
+          className="rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-400"
+        >
+          {submitError}
+        </p>
+      )}
 
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
         <button
           type="button"
           onClick={handleReset}
-          className="rounded-lg border border-gray-200 px-5 py-2.5 text-sm text-gray-700 transition hover:bg-gray-50"
+          disabled={isBusy}
+          className="rounded-lg border border-gray-200 px-5 py-2.5 text-sm text-gray-700 transition hover:bg-gray-50 disabled:opacity-50"
         >
-          Очистить форму
+          {resetLabel}
         </button>
+        {onCancel && (
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={isBusy}
+            className="rounded-lg border border-gray-200 px-5 py-2.5 text-sm text-gray-700 transition hover:bg-gray-50 disabled:opacity-50"
+          >
+            Отмена
+          </button>
+        )}
         <button
           type="submit"
-          className="rounded-lg bg-emerald-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-emerald-800"
+          disabled={isBusy}
+          className="rounded-lg bg-emerald-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-emerald-800 disabled:cursor-wait disabled:opacity-60"
         >
-          Добавить товар
+          {isSaving ? "Сохранение…" : submitLabel}
         </button>
       </div>
     </form>

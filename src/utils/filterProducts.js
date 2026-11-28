@@ -1,5 +1,5 @@
 export const sortOptions = [
-  { value: "default", label: "По умолчанию" },
+  { value: "default", label: "Сначала новые" },
   { value: "cheap", label: "Сначала дешёвые" },
   { value: "expensive", label: "Сначала дорогие" },
   { value: "nameAsc", label: "По названию: А–Я" },
@@ -8,6 +8,7 @@ export const sortOptions = [
 ];
 
 const sorters = {
+  default: (a, b) => Number(b.id) - Number(a.id),
   cheap: (a, b) => a.price - b.price,
   expensive: (a, b) => b.price - a.price,
   nameAsc: (a, b) => a.title.localeCompare(b.title, "ru"),

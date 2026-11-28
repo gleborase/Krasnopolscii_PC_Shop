@@ -1,33 +1,51 @@
 export const PRODUCT_LIMITS = {
   titleMin: 3,
   titleMax: 100,
+  brandMin: 2,
+  brandMax: 50,
   priceMax: 10000000,
   quantityMax: 100000,
   descriptionMin: 10,
   descriptionMax: 1000,
-  imageFileMaxSize: 5 * 1024 * 1024,
 };
 
 export const initialProductValues = {
+  image: "",
+  imageName: "",
+  imageSource: "file",
+  imageUrl: "",
   title: "",
+  brand: "",
   categoryId: "",
   price: "",
   quantity: "",
   description: "",
-  imageSource: "file",
-  imageFile: null,
-  imageUrl: "",
 };
 
-export function validateProduct(values) {
+export function validateProduct(values, { requireImage = true } = {}) {
   const errors = {};
   const title = values.title.trim();
+  const brand = values.brand.trim();
   const price = values.price.trim();
   const quantity = values.quantity.trim();
   const description = values.description.trim();
   const imageSource = values.imageSource ?? initialProductValues.imageSource;
-  const imageFile = values.imageFile ?? null;
   const imageUrl = (values.imageUrl ?? "").trim();
+
+  if (requireImage && imageSource === "file" && !values.image) {
+    errors.image = "Выберите фото товара";
+  } else if (requireImage && imageSource === "url" && !imageUrl) {
+    errors.image = "Укажите ссылку на изображение";
+  } else if (imageSource === "url" && imageUrl) {
+    try {
+      const url = new URL(imageUrl);
+      if (url.protocol !== "http:" && url.protocol !== "https:") {
+        errors.image = "Используйте ссылку, начинающуюся с http:// или https://";
+      }
+    } catch {
+      errors.image = "Введите корректную ссылку на изображение";
+    }
+  }
 
   if (!title) {
     errors.title = "Введите наименование товара";
@@ -35,6 +53,14 @@ export function validateProduct(values) {
     errors.title = `Минимум ${PRODUCT_LIMITS.titleMin} символа`;
   } else if (title.length > PRODUCT_LIMITS.titleMax) {
     errors.title = `Максимум ${PRODUCT_LIMITS.titleMax} символов`;
+  }
+
+  if (!brand) {
+    errors.brand = "Введите бренд";
+  } else if (brand.length < PRODUCT_LIMITS.brandMin) {
+    errors.brand = `Минимум ${PRODUCT_LIMITS.brandMin} символа`;
+  } else if (brand.length > PRODUCT_LIMITS.brandMax) {
+    errors.brand = `Максимум ${PRODUCT_LIMITS.brandMax} символов`;
   }
 
   if (!values.categoryId) {
@@ -67,29 +93,6 @@ export function validateProduct(values) {
     errors.description = `Максимум ${PRODUCT_LIMITS.descriptionMax} символов`;
   }
 
-  if (imageSource === "file") {
-    if (!imageFile) {
-      errors.image = "Выберите файл с изображением";
-    } else if (!imageFile.type?.startsWith("image/")) {
-      errors.image = "Выберите файл изображения";
-    } else if (imageFile.size === 0) {
-      errors.image = "Файл изображения пуст";
-    } else if (imageFile.size > PRODUCT_LIMITS.imageFileMaxSize) {
-      errors.image = "Размер изображения не должен превышать 5 МБ";
-    }
-  } else if (!imageUrl) {
-    errors.image = "Укажите ссылку на изображение";
-  } else {
-    try {
-      const url = new URL(imageUrl);
-      if (url.protocol !== "http:" && url.protocol !== "https:") {
-        errors.image = "Используйте ссылку, начинающуюся с http:// или https://";
-      }
-    } catch {
-      errors.image = "Введите корректную ссылку на изображение";
-    }
-  }
-
   return errors;
 }
 
@@ -100,11 +103,12 @@ export function buildProduct(values) {
 
   return {
     title: values.title.trim(),
+    brand: values.brand.trim(),
     categoryId: Number(values.categoryId),
     price: Number(values.price),
     quantity,
     inStock: quantity > 0,
     description: values.description.trim(),
-    image: imageSource === "file" ? values.imageFile ?? null : imageUrl,
+    image: imageSource === "file" ? values.image : imageUrl,
   };
 }

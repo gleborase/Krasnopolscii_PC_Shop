@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { fetchProducts } from "../api/productsApi";
+import {
+  deleteProduct as deleteProductRequest,
+  fetchProducts,
+} from "../api/productsApi";
 import { getErrorMessage } from "../api/http";
 
 export function useProducts() {
@@ -37,5 +40,12 @@ export function useProducts() {
     setAttempt((value) => value + 1);
   }
 
-  return { products, isLoading, error, refetch };
+  async function removeProduct(id) {
+    await deleteProductRequest(id);
+    setProducts((currentProducts) =>
+      currentProducts.filter((product) => product.id !== Number(id)),
+    );
+  }
+
+  return { products, isLoading, error, refetch, removeProduct };
 }
